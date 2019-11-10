@@ -1,12 +1,9 @@
 package com.calm.model.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +13,9 @@ public class Section {
 	
 	@Id
 	private int id;
+	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int sectionOrder;
 	
 	private String number;
 	
