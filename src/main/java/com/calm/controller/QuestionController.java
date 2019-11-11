@@ -1,6 +1,7 @@
 package com.calm.controller;
 
 import com.calm.model.entity.Question;
+import com.calm.model.enums.AnswerResult;
 import com.calm.model.repository.QuestionRepository;
 import com.calm.model.session.QuestionProgress;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -63,9 +65,21 @@ public class QuestionController {
 	}
 	
 	@PostMapping("/section/{sectionId}/question/{questionNumber}")
-	public ModelAndView doAnswer(ModelAndView model, @PathVariable int sectionId, @PathVariable int questionNumber, HttpSession session) {
+	public ModelAndView doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
 		List<QuestionProgress> questionsProgress = (List<QuestionProgress>) session.getAttribute("QUESTIONS_PROGRESS_LIST");
+		QuestionProgress currentQuestionProgress = questionsProgress.get(questionNumber - 1);
 		
-		return model;
+		Question question = questionRepository.findById(currentQuestionProgress.getQuestionId()).orElseThrow(() -> new RuntimeException(String.format("Question %d not found!", currentQuestionProgress.getQuestionId())));
+		if(question.getAnswer() == answer) {
+			currentQuestionProgress.setAnswerResult(AnswerResult.CORRECT);
+			session.setAttribute("QUESTIONS_PROGRESS_LIST", questionsProgress);
+			//если следующий вопрос существует, то редирект, иначе надо вернуть туда же, и можно показать алерт с поздравлением
+			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber + 1));
+		}
+		else{
+			currentQuestionProgress.setAnswerResult(AnswerResult.WRONG);
+			session.setAttribute("QUESTIONS_PROGRESS_LIST", questionsProgress);
+			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
+		}
 	}
 }

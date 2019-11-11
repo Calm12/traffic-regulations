@@ -45,3 +45,22 @@ footer {
 footer p {
     margin-bottom: .25rem;
 }
+
+.question-image {
+    width: 95%;
+    -webkit-transition: width .5s ease-in-out;
+    transition: width .5s ease-in-out;
+}
+
+.question-image:hover {
+    width: 150%!important;
+}
+
+.questions-progress {
+    max-width: 80%;
+    overflow-x: scroll;
+}
+
+.answer-button {
+    cursor: pointer;
+}

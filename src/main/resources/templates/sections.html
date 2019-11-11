@@ -23,8 +23,8 @@
         <div class="py-5 bg-light">
             <div class="container">
 
-                <div th:each="section : ${sections}" class="list-group">
-                    <a href="#" th:href="@{'/section/'+${section.id}}" th:text="${section.number}+'. '+${section.name}" class="list-group-item list-group-item-action">Text</a>
+                <div class="list-group">
+                    <a href="#" th:each="section : ${sections}" th:href="@{'/section/'+${section.id}}" th:text="${section.number}+'. '+${section.name}" class="list-group-item list-group-item-action">Text</a>
                 </div>
 
             </div>
