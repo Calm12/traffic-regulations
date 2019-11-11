@@ -3,7 +3,7 @@ package com.calm;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class AppTests {
 
 	@Test
