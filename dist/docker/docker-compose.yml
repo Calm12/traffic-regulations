@@ -6,7 +6,7 @@ services:
         image: redis:5.0
         restart: always
         environment:
-            ALLOW_EMPTY_PASSWORD: yes
+            - ALLOW_EMPTY_PASSWORD=yes
         volumes:
             - redis:/data
 
