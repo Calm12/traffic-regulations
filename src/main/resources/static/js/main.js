@@ -5,7 +5,12 @@ $(document).ready(function () {
 
     $('.answer-button').click(function () {
         var id = this.id;
-        $('#answer').val(id);
-        $('#answer-form').submit();
+        if($('#answer').is(':disabled')){
+            alertify.error('Нельзя изменять свой ответ');
+        }
+        else {
+            $('#answer').val(id);
+            $('#answer-form').submit();
+        }
     });
 });

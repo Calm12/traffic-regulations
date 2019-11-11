@@ -49,11 +49,12 @@ public class QuestionController {
 		List<QuestionProgress> questionsProgress = (List<QuestionProgress>) session.getAttribute("QUESTIONS_PROGRESS_LIST");
 		
 		try {
-			int questionId = questionsProgress.get(questionNumber - 1).getQuestionId();
-			Question question = questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException(String.format("Question %d not found!", questionId)));
+			QuestionProgress currentQuestionProgress = questionsProgress.get(questionNumber - 1);
+			Question question = questionRepository.findById(currentQuestionProgress.getQuestionId()).orElseThrow(() -> new RuntimeException(String.format("Question %d not found!", currentQuestionProgress.getQuestionId())));
 			
 			model.addObject("question", question);
 			model.addObject("progress", questionsProgress);
+			model.addObject("currentQuestionProgress", currentQuestionProgress);
 			model.setViewName("question");
 			
 			return model;
@@ -72,12 +73,14 @@ public class QuestionController {
 		Question question = questionRepository.findById(currentQuestionProgress.getQuestionId()).orElseThrow(() -> new RuntimeException(String.format("Question %d not found!", currentQuestionProgress.getQuestionId())));
 		if(question.getAnswer() == answer) {
 			currentQuestionProgress.setAnswerResult(AnswerResult.CORRECT);
+			currentQuestionProgress.setAnsweredNumber(answer);
 			session.setAttribute("QUESTIONS_PROGRESS_LIST", questionsProgress);
 			//если следующий вопрос существует, то редирект, иначе надо вернуть туда же, и можно показать алерт с поздравлением
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber + 1));
 		}
 		else{
 			currentQuestionProgress.setAnswerResult(AnswerResult.WRONG);
+			currentQuestionProgress.setAnsweredNumber(answer);
 			session.setAttribute("QUESTIONS_PROGRESS_LIST", questionsProgress);
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}

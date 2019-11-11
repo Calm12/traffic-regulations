@@ -5,6 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/alertifyjs/1.4.1/build/css/alertify.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/alertifyjs/1.4.1/build/css/themes/default.min.css}" />
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" />
 </head>
 <body>
@@ -21,7 +23,7 @@
                    th:href="@{'/section/'+${question.getSection().getId()}+'/question/'+${questionProgress.getQuestionNumber()}}"
                    th:class="'btn ' + ${questionProgress.getAnswerResult().ordinal() == 0 ? 'btn-light' : (questionProgress.getAnswerResult().ordinal() == 1 ? 'btn-success' : 'btn-danger')}"
                    th:classappend="${questionProgress.getQuestionNumber() == question.getNumber() ? 'active' : ''}"
-                   class="btn btn-outline-secondary" role="button">N</a>
+                   class="btn btn-light" role="button">N</a>
             </div>
         </section>
 
@@ -34,10 +36,18 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="list-group">
-                            <button th:each="answer : ${question.getAnswers()}" th:text="${answer.getText()}" class="list-group-item list-group-item-action answer-button" th:id="${answer.getNumber()}">Text</button>
+                            <button th:each="answer : ${question.getAnswers()}" th:text="${answer.getText()}"
+                                    th:classappend="${currentQuestionProgress.getAnswerResult().ordinal() != 0
+                                        ? (currentQuestionProgress.getAnswerResult().ordinal() == 1 && answer.getNumber() == currentQuestionProgress.getAnsweredNumber() ? 'list-group-item-success'
+                                            : (answer.getNumber() == question.getAnswer() ? 'list-group-item-success'
+                                                : (answer.getNumber() == currentQuestionProgress.getAnsweredNumber() ? 'list-group-item-danger' : '')
+                                            )
+                                        )
+                                    : ''}"
+                                    class="list-group-item list-group-item-action answer-button" th:id="${answer.getNumber()}">Text</button>
                         </div>
                         <form action="#" th:action="@{'/section/'+${question.getSection().getId()}+'/question/'+${question.getNumber()}}" method="post" id="answer-form">
-                            <input name="answer" id="answer" type="hidden"/>
+                            <input name="answer" id="answer" type="hidden" th:disabled="${currentQuestionProgress.getAnswerResult().ordinal() != 0}"/>
                         </form>
                     </div>
                     <div class="col-md-4">
@@ -53,8 +63,8 @@
     <footer th:replace="~{fragments/footer :: footer}" class="text-muted">footer</footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js" th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" th:src="@{/webjars/popper.js/1.14.3/popper.min.js}"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/webjars/alertifyjs/1.4.1/build/alertify.min.js}"></script>
     <script src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 </body>
 </html>

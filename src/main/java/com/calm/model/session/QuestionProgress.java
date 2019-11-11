@@ -14,5 +14,7 @@ public class QuestionProgress implements Serializable {
 	
 	private final int questionNumber;
 	
+	private int answeredNumber;
+	
 	private AnswerResult answerResult = AnswerResult.NOT_ANSWERED;
 }
