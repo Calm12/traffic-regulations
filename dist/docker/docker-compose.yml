@@ -9,6 +9,8 @@ services:
             - ALLOW_EMPTY_PASSWORD=yes
         volumes:
             - redis:/data
+        networks:
+            - backend-pdd
 
     db:
         image: mysql:8.0
