@@ -86,7 +86,7 @@ public class QuestionsParser implements IParser{
 				int answerCode = Integer.parseInt(StringUtils.chop(answerCodeSource.split(Pattern.quote(" = "))[1]));
 				int answer = ((answerCode - 3) / 7) + 1 - id;
 				
-				Question question = new Question(id, section.getId(), number, text, answerCode, answer);
+				Question question = new Question(id, section, number, text, answerCode, answer);
 				question.setImageJs(imageJs);
 				
 				for(Element answerLi : answersUl.children()) {

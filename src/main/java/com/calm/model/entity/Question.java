@@ -16,7 +16,9 @@ public class Question {
 	@Id
 	private int id;
 	
-	private int section;
+	@ManyToOne
+	@JoinColumn(name="section", nullable=false)
+	private Section section;
 	
 	private int number;
 	
@@ -35,7 +37,7 @@ public class Question {
 	@Column(length = 2000)
 	private String imageJs;
 	
-	public Question(int id, int section, int number, String text, int answerCode, int answer) {
+	public Question(int id, Section section, int number, String text, int answerCode, int answer) {
 		this.id = id;
 		this.section = section;
 		this.number = number;
