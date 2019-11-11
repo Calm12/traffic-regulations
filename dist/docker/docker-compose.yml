@@ -1,0 +1,63 @@
+version: '3.7'
+
+services:
+
+    redis:
+        image: redis:5.0
+        restart: always
+        environment:
+            - ALLOW_EMPTY_PASSWORD: yes
+        volumes:
+            - redis:/data
+
+    db:
+        image: mysql:8.0
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - database:/var/lib/mysql
+        networks:
+            - backend-pdd
+
+    main:
+        build:
+            context: ./
+            dockerfile: main.dockerfile
+        environment:
+            SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+        restart: always
+        working_dir: /var/pdd
+        ports:
+            - 80:8090
+        volumes:
+            - ./../:/var/pdd
+        networks:
+            - backend-pdd
+        depends_on:
+            - db
+
+    adminer:
+        image: adminer
+        restart: always
+        networks:
+            - frontend
+            - backend-pdd
+        ports:
+            - 8086:8080
+        depends_on:
+            - db
+
+volumes:
+    database:
+    redis:
+
+networks:
+    frontend:
+        external: true
+    backend-pdd:
+        external: true
