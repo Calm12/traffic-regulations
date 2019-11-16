@@ -10,6 +10,8 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public class QuestionProgress implements Serializable {
 	
+	private static final long serialVersionUID = -1813352285109896976L;
+	
 	private final int questionId;
 	
 	private final int questionNumber;
@@ -17,4 +19,12 @@ public class QuestionProgress implements Serializable {
 	private int answeredNumber;
 	
 	private AnswerResult answerResult = AnswerResult.NOT_ANSWERED;
+	
+	public boolean isAnswered() {
+		return answerResult != AnswerResult.NOT_ANSWERED;
+	}
+	
+	public boolean isWrongAnswered() {
+		return answerResult == AnswerResult.WRONG;
+	}
 }

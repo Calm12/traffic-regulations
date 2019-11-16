@@ -11,7 +11,9 @@ spring:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL8Dialect
                 enable_lazy_load_no_trans: true
-    thymeleaf:
+    freemarker:
+        template-loader-path: classpath:/templates
+        suffix: .ftl
         cache: false
     redis:
         host: localhost
