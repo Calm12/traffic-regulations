@@ -12,6 +12,8 @@ spring:
                 dialect: org.hibernate.dialect.MySQL8Dialect
                 enable_lazy_load_no_trans: true
     freemarker:
+        template-loader-path: classpath:/templates
+        suffix: .ftl
         cache: true
     redis:
         host: redis
