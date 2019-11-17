@@ -18,5 +18,13 @@ pipeline {
                 sh 'mvn package'
             }
         }
+        stage('docker build') {
+            steps {
+                dir('target/build/docker') {
+                    sh 'docker-compose build --no-cache'
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
     }
 }
