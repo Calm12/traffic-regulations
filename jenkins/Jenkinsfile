@@ -1,9 +1,21 @@
+properties([disableConcurrentBuilds()])
+
 pipeline {
-    agent { docker { image 'maven:3.3.3' } }
+    agent {
+        label 'master'
+    }
+    triggers {
+        pollSCM('* * * * *')
+    }
     stages {
-        stage('build') {
+        stage('configure') {
             steps {
-                sh 'mvn --version'
+                sh 'cp dist/docker/.env.template dist/docker/.env'
+            }
+        }
+        stage('maven build') {
+            steps {
+                sh 'mvn package'
             }
         }
     }
