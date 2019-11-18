@@ -15,8 +15,8 @@ pipeline {
         }
         stage('maven build') {
             steps {
-                sh 'sudo mvn clean package'
-                sh 'sudo chown 1000 -R target/build'
+                sh 'mvn clean package'
+                //sh 'sudo chown 1000 -R target/build'
             }
         }
         stage('docker build') {
