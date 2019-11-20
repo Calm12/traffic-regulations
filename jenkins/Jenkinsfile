@@ -13,12 +13,19 @@ pipeline {
                 sh 'cp dist/docker/.env.template dist/docker/.env'
             }
         }
+        stage('last docker stop') {
+            steps {
+                dir('target/build/docker') {
+                    sh 'docker-compose down'
+                }
+            }
+        }
         stage('maven build') {
             steps {
                 sh 'mvn clean package'
             }
         }
-        stage('docker build') {
+        stage('docker build and start') {
             steps {
                 dir('target/build/docker') {
                     sh 'export HOST_UID=$(id -u)'
