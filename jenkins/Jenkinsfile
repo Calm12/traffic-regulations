@@ -28,10 +28,14 @@ pipeline {
         stage('docker build and start') {
             steps {
                 dir('target/build/docker') {
-                    sh 'export HOST_UID=$(id -u)'
-                    sh 'export HOST_GID=$(id -g)'
-                    env.HOST_UID = 123
-                    env.HOST_GID = 456
+                    //sh 'export HOST_UID=$(id -u)'
+                    //sh 'export HOST_GID=$(id -g)'
+                    sh """
+                        export HOST_UID=\$(id -u)
+                        export HOST_GID=\$(id -g)
+                        echo $HOST_UID
+                        echo $HOST_GID
+                    """
                     sh 'echo $HOST_UID'
                     sh 'echo $HOST_GID'
                     sh 'docker-compose build --no-cache'
