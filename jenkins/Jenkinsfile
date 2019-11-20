@@ -16,7 +16,7 @@ pipeline {
         stage('last docker stop') {
             steps {
                 dir('target/build/docker') {
-                    sh 'docker-compose down'
+                    sh 'docker-compose down' //try use "|| true"
                 }
             }
         }
@@ -30,6 +30,8 @@ pipeline {
                 dir('target/build/docker') {
                     sh 'export HOST_UID=$(id -u)'
                     sh 'export HOST_GID=$(id -g)'
+                    env.HOST_UID = 123
+                    env.HOST_GID = 456
                     sh 'echo $HOST_UID'
                     sh 'echo $HOST_GID'
                     sh 'docker-compose build --no-cache'
