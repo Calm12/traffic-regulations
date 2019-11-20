@@ -16,12 +16,13 @@ pipeline {
         stage('maven build') {
             steps {
                 sh 'mvn clean package'
-                sh 'sudo chmod 775 -R target'
             }
         }
         stage('docker build') {
             steps {
                 dir('target/build/docker') {
+                    sh 'export HOST_UID=$(id -u)'
+                    sh 'export HOST_GID=$(id -g)'
                     sh 'docker-compose build --no-cache'
                     sh 'docker-compose up -d'
                 }

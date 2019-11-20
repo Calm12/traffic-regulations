@@ -2,8 +2,11 @@ FROM openjdk:8
 
 MAINTAINER Anton Calm <1calm2@gmail.com>
 
-RUN groupadd --gid 1000 node \
-&& useradd --uid 1000 --gid 1000 --shell /bin/bash node
+ARG HOST_UID
+ARG HOST_GID
+
+RUN groupadd --gid ${HOST_GID} node \
+&& useradd --uid ${HOST_UID} --gid ${HOST_GID} --shell /bin/bash node
 
 RUN mkdir /var/pdd && chown node:node /var/pdd
 
