@@ -30,6 +30,8 @@ pipeline {
                 dir('target/build/docker') {
                     sh 'export HOST_UID=$(id -u)'
                     sh 'export HOST_GID=$(id -g)'
+                    sh 'echo $HOST_UID'
+                    sh 'echo $HOST_GID'
                     sh 'docker-compose build --no-cache'
                     sh 'docker-compose up -d'
                 }
