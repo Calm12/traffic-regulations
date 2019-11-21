@@ -28,14 +28,18 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('docker build and start') {
+        stage('prepare jenkins user ids') {
             steps {
                 script {
                     HOST_UID_VAR = sh(script: 'id -u', returnStdout: true).trim()
                     HOST_GID_VAR = sh(script: 'id -g', returnStdout: true).trim()
                 }
+            }
+        }
+        stage('docker build and start') {
+            steps {
                 dir('target/build/docker') {
-                    withEnv(["HOST_UID=${HOST_UID_VAR}", "HOST_GID=${HOST_UID_VAR}"]) {
+                    withEnv(["HOST_UID=${HOST_UID_VAR}", "HOST_GID=${HOST_GID_VAR}"]) {
                         sh 'echo $HOST_UID'
                         sh 'echo $HOST_GID'
                         sh 'docker-compose build --no-cache'
