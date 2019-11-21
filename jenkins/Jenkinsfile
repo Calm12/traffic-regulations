@@ -28,18 +28,20 @@ pipeline {
         stage('docker build and start') {
             steps {
                 dir('target/build/docker') {
+                    withEnv(['HOST_UID=$(id -u)', 'HOST_GID=$(id -g)']) {
+                        sh 'echo $HOST_UID'
+                        sh 'echo $HOST_GID'
+                        sh 'docker-compose build --no-cache'
+                        sh 'docker-compose up -d'
+                    }
                     //sh 'export HOST_UID=$(id -u)'
                     //sh 'export HOST_GID=$(id -g)'
-                    sh """
+                    /*sh """
                         export HOST_UID=\$(id -u)
                         export HOST_GID=\$(id -g)
                         echo \$HOST_UID
                         echo \$HOST_GID
-                    """
-                    sh 'echo $HOST_UID'
-                    sh 'echo $HOST_GID'
-                    sh 'docker-compose build --no-cache'
-                    sh 'docker-compose up -d'
+                    """*/
                 }
             }
         }
