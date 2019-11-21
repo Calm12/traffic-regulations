@@ -28,7 +28,9 @@ pipeline {
         stage('docker build and start') {
             steps {
                 dir('target/build/docker') {
-                    withEnv(['HOST_UID=$(id -u)', 'HOST_GID=$(id -g)']) {
+                    HOST_UID_VAR = sh (script: 'id -u', returnStdout: true)
+                    HOST_GID_VAR = sh (script: 'id -g', returnStdout: true)
+                    withEnv(["HOST_UID=$HOST_UID_VAR", "HOST_GID=$HOST_UID_VAR"]) {
                         sh 'echo $HOST_UID'
                         sh 'echo $HOST_GID'
                         sh 'docker-compose build --no-cache'
