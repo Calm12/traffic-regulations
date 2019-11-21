@@ -31,8 +31,14 @@ pipeline {
         stage('docker build and start') {
             steps {
                 script {
-                    HOST_UID_VAR = sh(script: 'id -u', returnStdout: true)
-                    HOST_GID_VAR = sh(script: 'id -g', returnStdout: true)
+                    HOST_UID_VAR = sh(
+                        returnStdout: true,
+                        script: 'id -u'
+                    ).trim()
+                    HOST_GID_VAR = sh(
+                        returnStdout: true,
+                        script: 'id -g'
+                    ).trim()
                 }
                 dir('target/build/docker') {
                     withEnv(["HOST_UID=${HOST_UID_VAR}", "HOST_GID=${PHOST_UID_VAR}"]) {
