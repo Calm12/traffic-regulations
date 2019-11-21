@@ -33,7 +33,7 @@ pipeline {
                 script {
                     HOST_UID_VAR = sh(
                         returnStdout: true,
-                        script: 'id -u'
+                        script: "id -u"
                     ).trim()
                     HOST_GID_VAR = sh(
                         returnStdout: true,
