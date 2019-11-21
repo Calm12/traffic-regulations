@@ -40,8 +40,6 @@ pipeline {
             steps {
                 dir('target/build/docker') {
                     withEnv(["HOST_UID=${HOST_UID_VAR}", "HOST_GID=${HOST_GID_VAR}"]) {
-                        sh 'echo $HOST_UID'
-                        sh 'echo $HOST_GID'
                         sh 'docker-compose build --no-cache'
                         sh 'docker-compose up -d'
                     }
