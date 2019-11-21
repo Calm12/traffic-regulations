@@ -1,5 +1,8 @@
 properties([disableConcurrentBuilds()])
 
+def HOST_UID_VAR
+def HOST_GID_VAR
+
 pipeline {
     agent {
         label 'master'
@@ -29,8 +32,8 @@ pipeline {
             steps {
                 dir('target/build/docker') {
                     script {
-                        def HOST_UID_VAR = sh(script: 'id -u', returnStdout: true)
-                        def HOST_GID_VAR = sh(script: 'id -g', returnStdout: true)
+                        HOST_UID_VAR = sh(script: 'id -u', returnStdout: true)
+                        HOST_GID_VAR = sh(script: 'id -g', returnStdout: true)
                     }
                     withEnv(["HOST_UID=${HOST_UID_VAR}", "HOST_GID=${PHOST_UID_VAR}"]) {
                         sh 'echo $HOST_UID'
