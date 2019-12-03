@@ -12,4 +12,4 @@ RUN mkdir /var/pdd && chown node:node /var/pdd
 
 USER node
 
-CMD ./docker/wait-for-it.sh db:3306 -- java -jar -server -Dfile.encoding=UTF-8 -Xmx1G pdd.jar
+CMD ./docker/wait-for-it.sh db:3306 -- java -jar -server -Dfile.encoding=UTF-8 -Xmx1G pdd-web.jar
