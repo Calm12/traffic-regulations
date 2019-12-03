@@ -1,6 +1,0 @@
-[#ftl]
-[#-- @implicitly included --]
-[#-- @ftlvariable name="currentQuestionProgress" type="com.calm.model.session.QuestionProgress" file="templates/question.ftl" --]
-[#-- @ftlvariable name="progress" type="java.util.List<com.calm.model.session.QuestionProgress>" file="templates/question.ftl" --]
-[#-- @ftlvariable name="question" type="com.calm.model.entity.Question" file="templates/question.ftl" --]
-[#-- @ftlvariable name="sections" type="java.util.List<com.calm.model.entity.Section>" file="templates/sections.ftl" --]
