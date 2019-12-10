@@ -11,7 +11,7 @@
 
 	<artifactId>pdd-web</artifactId>
 	<version>1.0</version>
-	<name>pdd-web</name>
+	<name>${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

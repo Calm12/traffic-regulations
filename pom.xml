@@ -13,7 +13,7 @@
 	<groupId>com.calm</groupId>
 	<artifactId>pdd</artifactId>
 	<version>1.0</version>
-	<name>pdd</name>
+	<name>${project.artifactId}</name>
 	<description>Ukrainian road rules</description>
 	<packaging>pom</packaging>
 
