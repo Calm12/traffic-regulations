@@ -57,7 +57,6 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<finalName>${project.artifactId}</finalName>
 					<descriptors>
 						<descriptor>web-dist.xml</descriptor>
 					</descriptors>
