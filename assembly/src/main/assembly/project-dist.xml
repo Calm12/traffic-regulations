@@ -4,13 +4,13 @@
 
 	<id>dist</id>
 	<formats>
-		<format>dir</format>
+		<format>zip</format>
 	</formats>
 
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
 		<fileSet>
-			<directory>web/target/dist</directory>
+			<directory>../web/target/build</directory>
 			<outputDirectory>.</outputDirectory>
 			<includes>
 				<include>**/*.*</include>

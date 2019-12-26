@@ -21,6 +21,7 @@
 		<module>core</module>
 		<module>web</module>
 		<module>parsers</module>
+		<module>assembly</module>
 	</modules>
 
 	<developers>
@@ -74,22 +75,11 @@
 					<version>3.1.1</version>
 					<configuration>
 						<appendAssemblyId>false</appendAssemblyId>
-						<finalName>dist</finalName>
+						<finalName>build</finalName>
 					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
-		<plugins>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>project-dist.xml</descriptor>
-					</descriptors>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 
 </project>
