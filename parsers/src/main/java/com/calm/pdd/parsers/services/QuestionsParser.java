@@ -15,6 +15,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.apache.commons.io.FileUtils;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-//@Component
+@Profile("parser")
+@Component
 @Slf4j
 public class QuestionsParser implements IParser{
 	
@@ -32,18 +35,18 @@ public class QuestionsParser implements IParser{
 	private Map<String, String> cookies;
 	private final AppConfig appConfig;
 	
-	public QuestionsParser(SectionRepository sectionRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, Map<String, String> cookies, AppConfig appConfig) throws IOException {
+	public QuestionsParser(SectionRepository sectionRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, Map<String, String> cookies, AppConfig appConfig) {
 		this.sectionRepository = sectionRepository;
 		this.questionRepository = questionRepository;
 		this.answerRepository = answerRepository;
 		this.cookies = cookies;
 		this.appConfig = appConfig;
-		log.warn("QUESTIONS PARSE START");
-		//parse();
+		log.info("Questions parser ready");
 	}
 	
 	@Override
 	public void parse() throws IOException {
+		log.info("Questions parsing start");
 		List<Section> sections = sectionRepository.findAll();
 		
 		for(Section section : sections) {
@@ -99,6 +102,7 @@ public class QuestionsParser implements IParser{
 			}
 			
 		}
+		log.info("Questions parsing end");
 	}
 	
 	public void answerCodesFix() {
@@ -108,5 +112,6 @@ public class QuestionsParser implements IParser{
 			question.setAnswer(answer);
 			questionRepository.save(question);
 		}
+		log.info("Answers codes fixed");
 	}
 }

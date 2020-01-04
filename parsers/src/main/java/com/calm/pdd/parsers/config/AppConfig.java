@@ -14,5 +14,6 @@ public class AppConfig {
 	@Data
 	public static class Parsers {
 		private String url;
+		private String userAuthCookie;
 	}
 }

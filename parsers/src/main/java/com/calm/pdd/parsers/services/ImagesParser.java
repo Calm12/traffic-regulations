@@ -2,9 +2,10 @@ package com.calm.pdd.parsers.services;
 
 import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.repository.QuestionRepository;
-import com.calm.pdd.parsers.config.AppConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,36 +14,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//@Component
+@Profile("parser")
+@Component
 @Slf4j
 public class ImagesParser implements IParser{
 	
 	private final QuestionRepository questionRepository;
-	private final AppConfig appConfig;
 	
-	public ImagesParser(QuestionRepository questionRepository, AppConfig appConfig) throws IOException {
+	public ImagesParser(QuestionRepository questionRepository) {
 		this.questionRepository = questionRepository;
-		this.appConfig = appConfig;
-		log.warn("IMAGES PARSE START");
-		//parse();
-		//parseImagesUrlsFromJs();
+		log.info("Images parser ready");
 	}
 	
 	@Override
-	public void parse() throws IOException {
-		List<Question> allQuestions = questionRepository.findAll();
-		
-		int downloaded = 0;
-		
-		for(Question question : allQuestions) {
-			FileUtils.copyURLToFile(new URL(question.getImageUrl()), new File(String.format("images/%d.jpg", question.getId())));
-			downloaded++;
-		}
-		log.info("Downloaded: " + downloaded);
-		log.info("Expected: " + questionRepository.count());
-	}
-	
-	public void parseImagesUrlsFromJs() {
+	public void parse() {
+		log.info("Images urls parsing from js start");
 		List<Question> allQuestions = questionRepository.findAll();
 		
 		int hasImg = 0;
@@ -70,5 +56,21 @@ public class ImagesParser implements IParser{
 		}
 		log.info("Good img questions: " + (hasImg+noImg));
 		log.info("Expected img questions: " + questionRepository.count());
+		log.info("Images urls parsing from js end");
+	}
+	
+	public void download() throws IOException {
+		log.info("Images downloading start");
+		List<Question> allQuestions = questionRepository.findAll();
+		
+		int downloaded = 0;
+		
+		for(Question question : allQuestions) {
+			FileUtils.copyURLToFile(new URL(question.getImageUrl()), new File(String.format("images/%d.jpg", question.getId())));
+			downloaded++;
+		}
+		log.info("Downloaded: " + downloaded);
+		log.info("Expected: " + questionRepository.count());
+		log.info("Images downloading end");
 	}
 }

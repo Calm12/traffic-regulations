@@ -9,13 +9,16 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-//@Component
+@Profile("parser")
+@Component
 @Slf4j
 public class SectionParser implements IParser{
 	
@@ -23,18 +26,18 @@ public class SectionParser implements IParser{
 	private Map<String, String> cookies;
 	private final AppConfig appConfig;
 	
-	public SectionParser(SectionRepository sectionRepository, Map<String, String> cookies, AppConfig appConfig) throws IOException {
+	public SectionParser(SectionRepository sectionRepository, Map<String, String> cookies, AppConfig appConfig) {
 		this.sectionRepository = sectionRepository;
 		this.cookies = cookies;
 		this.appConfig = appConfig;
-		log.warn("SECTIONS PARSE START");
-		//parse();
+		log.info("Sections parser ready");
 	}
 	
 	@Override
 	public void parse() throws IOException {
+		log.info("Sections parsing start");
 		Response res = Jsoup.
-				connect("https://green-way.com.ua/uk/test-pdd/sections")
+				connect(String.format("%s/test-pdd/sections", appConfig.getParsers().getUrl()))
 				.cookies(cookies)
 				.execute();
 		
@@ -56,5 +59,6 @@ public class SectionParser implements IParser{
 			String[] text = element.select(".info-text").text().split(Pattern.quote(". "));
 			sectionRepository.save(new Section(Integer.parseInt(element.id()), text[0], text[1]));
 		}
+		log.info("Sections parsing end");
 	}
 }

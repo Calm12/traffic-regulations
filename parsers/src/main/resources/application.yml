@@ -1,0 +1,22 @@
+spring:
+    profiles:
+        active: parser
+    main:
+        web-application-type: none
+    datasource:
+        url: jdbc:mysql://localhost:3306/pdd-test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+        username: root
+        password: mysql_root_password
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: false
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL8Dialect
+                enable_lazy_load_no_trans: true
+
+app:
+    parsers:
+        url: https://green-way.com.ua/uk
+        user-auth-cookie: eyJpdiI6IlwvY1NDT0l1RWJieGd6a1NsOHN5c1p3PT0iLCJ2YWx1ZSI6ImJ1YnpwTEd1d292RkUrOTB1V2kyRklyd2hpQUZ0OXlUVSs4a1UyV1B2Qk8rcis4NEM5Ukpvd3QrVEpqMnI4Mm1VbjFMREJXQXVvakNVOFVCdkV3N1ZqNmJoa3hLcmh1SVB0dnRhMlg2YmhFek5cL2syNnVJb3B0YVIrMlpIQUU0diIsIm1hYyI6ImU3ODUyMjlhZTY4NDQ5MzRjMWIzMDI2NDNjODg4YzdlM2M0MGNmMWYzOWE0ZWRlODE3MGZiN2Q5MGVjNWM2NWEifQ%3D%3D
