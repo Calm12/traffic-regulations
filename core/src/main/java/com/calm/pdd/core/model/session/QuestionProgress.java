@@ -1,6 +1,6 @@
-package com.calm.pdd.web.model.session;
+package com.calm.pdd.core.model.session;
 
-import com.calm.pdd.web.model.enums.AnswerResult;
+import com.calm.pdd.core.model.enums.AnswerResult;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

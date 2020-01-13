@@ -24,6 +24,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="list-group">
+                <#assign currentQuestionProgress = progress[question.number - 1]>
                 <#list question.answers as answer>
                     <#if currentQuestionProgress.isAnswered()>
                         <button class="list-group-item list-group-item-action answer-button<#if answer.number == question.answer> list-group-item-success</#if><#if currentQuestionProgress.isWrongAnswered() && answer.number == currentQuestionProgress.answeredNumber> list-group-item-danger</#if>" id="${answer.number}">${answer.text}</button>

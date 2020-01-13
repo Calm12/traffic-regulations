@@ -1,4 +1,4 @@
-package com.calm.pdd.web.model.enums;
+package com.calm.pdd.core.model.enums;
 
 public enum AnswerResult {
 	NOT_ANSWERED,
