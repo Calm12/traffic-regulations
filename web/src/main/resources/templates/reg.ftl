@@ -40,6 +40,7 @@
                     <@spring.formPasswordInput "user.matchingPassword" "class='form-control' placeholder='Повторите пароль'"/>
                 </div>
                 <div class="form-group">
+                    <input type="hidden" name="_csrf" value="${_csrf.token}" />
                     <button type="submit" class="btn btn-primary btn-block">Создать аккаунт</button>
                 </div>
                 <p class="text-center">Уже есть аккаунт? <a href="<@spring.url '/login'/>">Войти</a></p>

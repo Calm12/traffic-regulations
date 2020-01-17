@@ -13,6 +13,12 @@
                         <li><a href="#" class="text-white">20 случайных вопросов</a></li>
                         <li><a href="/reg" class="text-white">Регистрация</a></li>
                         <li><a href="/login" class="text-white">Войти</a></li>
+                        <li>
+                            <form action="/logout" method="post">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                                <a href="" class="text-white" onclick="this.parentNode.submit(); return false;">Выйти</a>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

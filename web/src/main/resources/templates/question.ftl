@@ -34,6 +34,7 @@
                 </#list>
             </div>
             <form action="/section/#{question.section.id}/question/#{question.number}" method="post" id="answer-form">
+                <input type="hidden" name="_csrf" value="${_csrf.token}" />
                 <input name="answer" id="answer" type="hidden" <#if currentQuestionProgress.isAnswered()>disabled</#if>/>
             </form>
         </div>

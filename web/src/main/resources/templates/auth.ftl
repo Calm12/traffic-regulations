@@ -29,6 +29,7 @@
                     <input type="password" name="password" class='form-control' placeholder='Пароль'/>
                 </div>
                 <div class="form-group">
+                    <input type="hidden" name="_csrf" value="${_csrf.token}" />
                     <button type="submit" class="btn btn-primary btn-block">Войти</button>
                 </div>
                 <p class="text-center">Еще нет аккаунта? <a href="<@spring.url '/reg'/>">Регистрация</a></p>
