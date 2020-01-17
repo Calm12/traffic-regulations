@@ -11,6 +11,8 @@
                     <ul class="list-unstyled">
                         <li><a href="/sections" class="text-white">Вопросы по темам</a></li>
                         <li><a href="#" class="text-white">20 случайных вопросов</a></li>
+                        <li><a href="/reg" class="text-white">Регистрация</a></li>
+                        <li><a href="/login" class="text-white">Войти</a></li>
                     </ul>
                 </div>
             </div>
