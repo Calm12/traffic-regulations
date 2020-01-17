@@ -8,15 +8,18 @@ import com.calm.pdd.core.model.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {
 	
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	@Override
@@ -26,9 +29,7 @@ public class UserService implements IUserService, UserDetailsService {
 		return userRepository.save(new User(
 				userDto.getUsername(),
 				userDto.getEmail(),
-				userDto.getPassword()
-				//passwordEncoder.encode(userDto.getPassword()) //изза того что в коре захуячил секьюрити зависимость, все по пизде и оно тут автоконфигурится второй раз
-				//upd: убрал нахер отсюда, оставит только в вебе, но всеравно просит логин... штош надо учить секьюрити щас
+				passwordEncoder.encode(userDto.getPassword())
 		));
 	}
 	
