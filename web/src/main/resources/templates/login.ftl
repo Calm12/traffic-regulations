@@ -15,9 +15,9 @@
     <div class="container">
         <div class="mx-auto reg-form">
             <form action="/login" method="post" autocomplete="off">
-                <#if SPRING_SECURITY_LAST_EXCEPTION?? && SPRING_SECURITY_LAST_EXCEPTION.message?has_content>
+                <#if loginError??>
                     <div class="alert alert-danger" role="alert">
-                        <a class="close" data-dismiss="alert"><i class="fa fa-xs fa-times"></i></a>${SPRING_SECURITY_LAST_EXCEPTION.message}
+                        <a class="close" data-dismiss="alert"><i class="fa fa-xs fa-times"></i></a>${loginError}
                     </div>
                 </#if>
                 <div class="form-group input-group">
