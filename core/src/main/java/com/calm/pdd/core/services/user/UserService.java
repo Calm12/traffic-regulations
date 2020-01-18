@@ -4,6 +4,7 @@ import com.calm.pdd.core.exceptions.EmailExistsException;
 import com.calm.pdd.core.exceptions.UserExistsException;
 import com.calm.pdd.core.model.dto.UserDto;
 import com.calm.pdd.core.model.entity.User;
+import com.calm.pdd.core.model.enums.Role;
 import com.calm.pdd.core.model.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,11 +27,14 @@ public class UserService implements IUserService, UserDetailsService {
 	public User registerNewUser(final UserDto userDto) throws UserExistsException, EmailExistsException {
 		checkForUsernameAndEmailExisting(userDto);
 		
-		return userRepository.save(new User(
-				userDto.getUsername(),
-				userDto.getEmail(),
-				passwordEncoder.encode(userDto.getPassword())
-		));
+		User user = new User()
+				.setUsername(userDto.getUsername())
+				.setEmail(userDto.getEmail())
+				.setPassword(passwordEncoder.encode(userDto.getPassword()))
+				.setActive(true)
+				.addRole(Role.USER);
+		
+		return userRepository.save(user);
 	}
 	
 	@Override
