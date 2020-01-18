@@ -7,10 +7,18 @@
     <div class="container">
         <h1 class="jumbotron-heading">Подготовка к экзамену в СЦ</h1>
         <p class="lead text-muted">Наша база содержит все вопросы с теоретического экзамена по правилам дорожного движения в сервисном центре</p>
-        <p>
-            <a href="/sections" class="btn btn-primary my-2">Вопросы по темам</a>
-            <a href="#" class="btn btn-secondary my-2">Случайные вопросы</a>
-        </p>
+        <#if authUser??>
+            <p>
+                <a href="/sections" class="btn btn-primary my-2">Вопросы по темам</a>
+                <a href="#" class="btn btn-secondary my-2">Случайные вопросы</a>
+            </p>
+        <#else>
+            <p>
+                <a href="/reg" class="btn btn-primary my-2">Регистрация</a>
+                <a href="/login" class="btn btn-secondary my-2">Войти</a>
+            </p>
+        </#if>
+
     </div>
 </section>
 

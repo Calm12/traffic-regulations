@@ -23,7 +23,7 @@
 
 <#include "header.ftl">
 
-<main role="main">
+<main role="main" style="margin-top: 56px;">
     <@content/>
 </main>
 

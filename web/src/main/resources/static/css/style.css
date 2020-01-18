@@ -68,3 +68,35 @@ footer p {
 .reg-form {
     max-width: 400px;
 }
+
+.navbar-toggler:focus {
+    outline: none;
+}
+
+@media screen and (max-width: 400px) {
+    .logo-text {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .username-in-header {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 70px;
+    }
+}
+
+.user-icon-in-header {
+    display: none;
+}
+
+@media screen and (max-width: 290px) {
+    .username-in-header {
+        display: none !important;
+    }
+
+    .user-icon-in-header {
+        display: block !important;
+    }
+}
