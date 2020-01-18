@@ -5,7 +5,7 @@ import com.calm.pdd.core.exceptions.UserExistsException;
 import com.calm.pdd.core.model.dto.UserDto;
 import com.calm.pdd.core.model.entity.User;
 
-public interface IUserService {
+public interface IUserRegistrationService {
 	
 	User registerNewUser(UserDto userDto) throws UserExistsException, EmailExistsException;
 }
