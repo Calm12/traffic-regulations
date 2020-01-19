@@ -6,10 +6,10 @@
 <section class="jumbotron text-center">
     <h3 class="jumbotron-heading pb-2">${question.section.number}. ${question.section.name}</h3>
     <div class="btn-group questions-progress" role="group">
-        <#list progress as questionProgress>
-            <#rt><a href="/section/#{question.section.id}/question/#{questionProgress.questionNumber}"
-                <#t>class="btn <#if !questionProgress.isAnswered()>btn-light<#elseif questionProgress.isWrongAnswered()>btn-danger<#else>btn-success</#if> <#if questionProgress.questionNumber == question.number>active</#if>"
-                <#t>role="button">#{questionProgress.questionNumber}
+        <#list progress.list as questionProgressUnit>
+            <#rt><a href="/section/#{question.section.id}/question/#{questionProgressUnit.questionNumber}"
+                <#t>class="btn <#if !questionProgressUnit.isAnswered()>btn-light<#elseif questionProgressUnit.isWrongAnswered()>btn-danger<#else>btn-success</#if> <#if questionProgressUnit.questionNumber == question.number>active</#if>"
+                <#t>role="button">#{questionProgressUnit.questionNumber}
             <#lt></a>
         </#list>
     </div>
@@ -24,10 +24,10 @@
     <div class="row">
         <div class="col-md-8">
             <div class="list-group">
-                <#assign currentQuestionProgress = progress[question.number - 1]>
+                <#assign currentQuestionProgressUnit = progress.getByNumber(question.number)>
                 <#list question.answers as answer>
-                    <#if currentQuestionProgress.isAnswered()>
-                        <button class="list-group-item list-group-item-action answer-button<#if answer.number == question.answer> list-group-item-success</#if><#if currentQuestionProgress.isWrongAnswered() && answer.number == currentQuestionProgress.answeredNumber> list-group-item-danger</#if>" id="${answer.number}">${answer.text}</button>
+                    <#if currentQuestionProgressUnit.isAnswered()>
+                        <button class="list-group-item list-group-item-action answer-button<#if answer.number == question.answer> list-group-item-success</#if><#if currentQuestionProgressUnit.isWrongAnswered() && answer.number == currentQuestionProgressUnit.answeredNumber> list-group-item-danger</#if>" id="${answer.number}">${answer.text}</button>
                     <#else>
                         <button class="list-group-item list-group-item-action answer-button" id="${answer.number}">${answer.text}</button>
                     </#if>
@@ -35,7 +35,7 @@
             </div>
             <form action="/section/#{question.section.id}/question/#{question.number}" method="post" id="answer-form">
                 <input type="hidden" name="_csrf" value="${_csrf.token}" />
-                <input name="answer" id="answer" type="hidden" <#if currentQuestionProgress.isAnswered()>disabled</#if>/>
+                <input name="answer" id="answer" type="hidden" <#if currentQuestionProgressUnit.isAnswered()>disabled</#if>/>
             </form>
         </div>
         <div class="col-md-4">

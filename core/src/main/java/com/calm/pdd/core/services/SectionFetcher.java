@@ -5,6 +5,7 @@ import com.calm.pdd.core.model.entity.Section;
 import com.calm.pdd.core.model.repository.QuestionRepository;
 import com.calm.pdd.core.model.repository.SectionRepository;
 import com.calm.pdd.core.model.session.QuestionProgress;
+import com.calm.pdd.core.model.session.QuestionProgressUnit;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +22,12 @@ public class SectionFetcher {
 		this.sectionRepository = sectionRepository;
 	}
 	
-	public List<QuestionProgress> fetchSection(int sectionId) {
+	public QuestionProgress fetchSection(int sectionId) {
 		List<Question> questions = questionRepository.getListBySectionId(sectionId);
 		
-		return questions.stream().map(q -> new QuestionProgress(q.getId(), q.getNumber())).collect(Collectors.toList());
+		List<QuestionProgressUnit> progressUnits = questions.stream().map(q -> new QuestionProgressUnit(q.getId(), q.getNumber())).collect(Collectors.toList()); //что если вынести в QuestionProgressBuilder
+		
+		return new QuestionProgress(progressUnits);
 	}
 	
 	public List<Section> fetchSectionsList() {

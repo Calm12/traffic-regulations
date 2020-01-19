@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -33,13 +32,12 @@ public class QuestionController {
 	
 	@GetMapping("/section/{sectionId}")
 	public RedirectView enterSection(@PathVariable int sectionId, HttpSession session) {
-		List<QuestionProgress> questionProgress = sectionFetcher.fetchSection(sectionId);
-		QuestionProgress firstQuestion = questionProgress.get(0);
+		QuestionProgress questionProgress = sectionFetcher.fetchSection(sectionId);
 		
-		session.setAttribute("QUESTIONS_PROGRESS_LIST", questionProgress);
-		session.setAttribute("CURRENT_SECTION", sectionId);
+		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
+		session.setAttribute("CURRENT_SECTION", sectionId); //это можно ваще хранить в объекте прогресса
 		
-		return new RedirectView(String.format("/section/%d/question/%d", sectionId, firstQuestion.getQuestionNumber()));
+		return new RedirectView(String.format("/section/%d/question/%d", sectionId, questionProgress.getFirst().getQuestionNumber()));
 	}
 	
 	@GetMapping("/section/{sectionId}/question/{questionNumber}")
@@ -49,11 +47,11 @@ public class QuestionController {
 			return new ModelAndView("redirect:/sections");
 		}
 		
-		List<QuestionProgress> questionsProgress = (List<QuestionProgress>) session.getAttribute("QUESTIONS_PROGRESS_LIST");
-		Question question = questionFetcher.fetchQuestion(questionsProgress, questionNumber);
+		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		Question question = questionFetcher.fetchQuestion(questionProgress, questionNumber);
 		
 		model.addObject("question", question);
-		model.addObject("progress", questionsProgress);
+		model.addObject("progress", questionProgress);
 		model.setViewName("question");
 		
 		return model;
@@ -61,12 +59,13 @@ public class QuestionController {
 	
 	@PostMapping("/section/{sectionId}/question/{questionNumber}")
 	public ModelAndView doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
-		List<QuestionProgress> questionsProgress = (List<QuestionProgress>) session.getAttribute("QUESTIONS_PROGRESS_LIST");
-		List<QuestionProgress> newQuestionsProgress = answerChecker.checkAnswer(questionsProgress, questionNumber, answer);
+		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
-		session.setAttribute("QUESTIONS_PROGRESS_LIST", newQuestionsProgress);
+		QuestionProgress newQuestionProgress = answerChecker.checkAnswer(questionProgress, questionNumber, answer);
 		
-		if(newQuestionsProgress.get(questionNumber - 1).isWrongAnswered()) {
+		session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
+		
+		if(newQuestionProgress.getByNumber(questionNumber).isWrongAnswered()) {
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}
 		else {

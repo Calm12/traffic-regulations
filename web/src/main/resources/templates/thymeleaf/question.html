@@ -18,11 +18,11 @@
         <section class="jumbotron text-center">
             <h3 th:text="${question.getSection().getNumber()}+'. '+${question.getSection().getName()}" class="jumbotron-heading pb-2">Вопросы по теме</h3>
             <div class="btn-group questions-progress" role="group">
-                <a th:each="questionProgress : ${progress}"
-                   th:text="${questionProgress.getQuestionNumber()}"
-                   th:href="@{'/section/'+${question.getSection().getId()}+'/question/'+${questionProgress.getQuestionNumber()}}"
-                   th:class="'btn ' + ${questionProgress.getAnswerResult().ordinal() == 0 ? 'btn-light' : (questionProgress.getAnswerResult().ordinal() == 1 ? 'btn-success' : 'btn-danger')}"
-                   th:classappend="${questionProgress.getQuestionNumber() == question.getNumber() ? 'active' : ''}"
+                <a th:each="questionProgressUnits : ${progress}"
+                   th:text="${questionProgressUnits.getQuestionNumber()}"
+                   th:href="@{'/section/'+${question.getSection().getId()}+'/question/'+${questionProgressUnits.getQuestionNumber()}}"
+                   th:class="'btn ' + ${questionProgressUnits.getAnswerResult().ordinal() == 0 ? 'btn-light' : (questionProgressUnits.getAnswerResult().ordinal() == 1 ? 'btn-success' : 'btn-danger')}"
+                   th:classappend="${questionProgressUnits.getQuestionNumber() == question.getNumber() ? 'active' : ''}"
                    class="btn btn-light" role="button">N</a>
             </div>
         </section>
@@ -37,17 +37,17 @@
                     <div class="col-md-8">
                         <div class="list-group">
                             <button th:each="answer : ${question.getAnswers()}" th:text="${answer.getText()}"
-                                    th:classappend="${currentQuestionProgress.getAnswerResult().ordinal() != 0
-                                        ? (currentQuestionProgress.getAnswerResult().ordinal() == 1 && answer.getNumber() == currentQuestionProgress.getAnsweredNumber() ? 'list-group-item-success'
+                                    th:classappend="${currentQuestionProgressUnit.getAnswerResult().ordinal() != 0
+                                        ? (currentQuestionProgressUnit.getAnswerResult().ordinal() == 1 && answer.getNumber() == currentQuestionProgressUnit.getAnsweredNumber() ? 'list-group-item-success'
                                             : (answer.getNumber() == question.getAnswer() ? 'list-group-item-success'
-                                                : (answer.getNumber() == currentQuestionProgress.getAnsweredNumber() ? 'list-group-item-danger' : '')
+                                                : (answer.getNumber() == currentQuestionProgressUnit.getAnsweredNumber() ? 'list-group-item-danger' : '')
                                             )
                                         )
                                     : ''}"
                                     class="list-group-item list-group-item-action answer-button" th:id="${answer.getNumber()}">Text</button>
                         </div>
                         <form action="#" th:action="@{'/section/'+${question.getSection().getId()}+'/question/'+${question.getNumber()}}" method="post" id="answer-form">
-                            <input name="answer" id="answer" type="hidden" th:disabled="${currentQuestionProgress.getAnswerResult().ordinal() != 0}"/>
+                            <input name="answer" id="answer" type="hidden" th:disabled="${currentQuestionProgressUnit.getAnswerResult().ordinal() != 0}"/>
                         </form>
                     </div>
                     <div class="col-md-4">
