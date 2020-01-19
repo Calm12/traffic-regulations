@@ -35,19 +35,22 @@ public class QuestionController {
 		QuestionProgress questionProgress = sectionFetcher.fetchSection(sectionId);
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
-		session.setAttribute("CURRENT_SECTION", sectionId); //это можно ваще хранить в объекте прогресса
 		
 		return new RedirectView(String.format("/section/%d/question/%d", sectionId, questionProgress.getFirst().getQuestionNumber()));
 	}
 	
 	@GetMapping("/section/{sectionId}/question/{questionNumber}")
 	public ModelAndView question(ModelAndView model, @PathVariable int sectionId, @PathVariable int questionNumber, HttpSession session) {
-		if((int)session.getAttribute("CURRENT_SECTION") != sectionId) {
-			log.warn("Wrong section!");
+		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		
+		if(questionProgress == null) {
 			return new ModelAndView("redirect:/sections");
 		}
 		
-		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		if(!questionProgress.isFixedSection(sectionId)) {
+			return new ModelAndView("redirect:/sections");
+		}
+		
 		Question question = questionFetcher.fetchQuestion(questionProgress, questionNumber);
 		
 		model.addObject("question", question);

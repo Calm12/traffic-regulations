@@ -1,6 +1,9 @@
 package com.calm.pdd.core.model.session;
 
 import com.calm.pdd.core.exceptions.UnknownQuestionException;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +14,15 @@ public class QuestionProgress implements Serializable {
 	
 	private final List<QuestionProgressUnit> progressUnits;
 	
-	public QuestionProgress(List<QuestionProgressUnit> progressUnits) {
+	@Setter(AccessLevel.PACKAGE)
+	@Getter
+	private SectionType sectionType;
+	
+	@Setter(AccessLevel.PACKAGE)
+	@Getter
+	private int sectionId;
+	
+	QuestionProgress(List<QuestionProgressUnit> progressUnits) {
 		this.progressUnits = progressUnits;
 	}
 	
@@ -30,5 +41,13 @@ public class QuestionProgress implements Serializable {
 	
 	public List<QuestionProgressUnit> getList() {
 		return progressUnits;
+	}
+	
+	public boolean isRandomSet() {
+		return sectionType == SectionType.RANDOM;
+	}
+	
+	public boolean isFixedSection(int sectionId) {
+		return this.sectionId == sectionId && sectionType == SectionType.FIXED;
 	}
 }
