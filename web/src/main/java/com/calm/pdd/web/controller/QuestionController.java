@@ -72,9 +72,16 @@ public class QuestionController {
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}
 		else {
-			//если следующий вопрос существует, то редирект, иначе надо вернуть туда же, и можно показать алерт с поздравлением (а точнее, если еще существуют неотвеченные вопросы)
-			//Вариант искать первый неотвеченный и кидать на него, а если все отвечены, то на страницу с поздравлением. Это все только если следующий вопрос не существует.
-			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber + 1));
+			if(newQuestionProgress.hasNext(questionNumber)) {
+				return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber + 1));
+			}
+			else if(newQuestionProgress.hasUnanswered()) {
+				return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getFirstUnanswered().getQuestionNumber()));
+			}
+			else {
+				//прогресс 100%, все вопросы отвечены, гц
+				return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber)); //stub
+			}
 		}
 	}
 }

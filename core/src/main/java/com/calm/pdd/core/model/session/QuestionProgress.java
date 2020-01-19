@@ -4,10 +4,12 @@ import com.calm.pdd.core.exceptions.UnknownQuestionException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Slf4j
 public class QuestionProgress implements Serializable {
 	
 	private static final long serialVersionUID = 8436522977827859517L;
@@ -27,7 +29,13 @@ public class QuestionProgress implements Serializable {
 	}
 	
 	public QuestionProgressUnit getFirst() {
-		return progressUnits.get(0); //что если лист пустой?
+		try {
+			return progressUnits.get(0);
+		}
+		catch(IndexOutOfBoundsException e) {
+			log.error("Empty questions progress!", e);
+			throw new UnknownQuestionException("Empty questions progress!");
+		}
 	}
 	
 	public QuestionProgressUnit getByNumber(int questionNumber) {
@@ -37,6 +45,19 @@ public class QuestionProgress implements Serializable {
 		catch(IndexOutOfBoundsException e) {
 			throw new UnknownQuestionException("Wrong question number for this section!");
 		}
+	}
+	
+	public boolean hasNext(int questionNumber) {
+		//nextQuestionIndex[0...N] == questionNumber[1..N]
+		return questionNumber >= 0 && questionNumber < progressUnits.size();
+	}
+	
+	public boolean hasUnanswered() {
+		return progressUnits.stream().anyMatch(q -> !q.isAnswered());
+	}
+	
+	public QuestionProgressUnit getFirstUnanswered() {
+		return progressUnits.stream().filter(q -> !q.isAnswered()).findFirst().orElseThrow(() -> new UnknownQuestionException("Please use QuestionProgress::hasUnanswered before QuestionProgress::getFirstUnanswered."));
 	}
 	
 	public List<QuestionProgressUnit> getList() {
