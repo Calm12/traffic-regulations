@@ -1,3 +1,7 @@
+.main {
+    margin-top: 56px;
+}
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -63,6 +67,10 @@ footer p {
 
 .answer-button {
     cursor: pointer;
+}
+
+.result-progress-bar {
+    height: 2rem;
 }
 
 .reg-form {

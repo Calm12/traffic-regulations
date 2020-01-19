@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 public class QuestionProgress implements Serializable {
@@ -15,6 +16,12 @@ public class QuestionProgress implements Serializable {
 	private static final long serialVersionUID = 8436522977827859517L;
 	
 	private final List<QuestionProgressUnit> progressUnits;
+	
+	@Getter
+	private String id;
+	
+	@Getter
+	private long startTime;
 	
 	@Setter(AccessLevel.PACKAGE)
 	@Getter
@@ -24,8 +31,14 @@ public class QuestionProgress implements Serializable {
 	@Getter
 	private int sectionId;
 	
+	@Setter(AccessLevel.PACKAGE)
+	@Getter
+	private String progressName;
+	
 	QuestionProgress(List<QuestionProgressUnit> progressUnits) {
 		this.progressUnits = progressUnits;
+		id = UUID.randomUUID().toString();
+		startTime = System.currentTimeMillis();
 	}
 	
 	public QuestionProgressUnit getFirst() {

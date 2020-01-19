@@ -4,10 +4,10 @@
 
 <#macro content>
 <section class="jumbotron text-center">
-    <h3 class="jumbotron-heading pb-2">${question.section.number}. ${question.section.name}</h3>
+    <h3 class="jumbotron-heading pb-2">${progress.progressName}</h3>
     <div class="btn-group questions-progress" role="group">
         <#list progress.list as questionProgressUnit>
-            <#rt><a href="/section/#{question.section.id}/question/#{questionProgressUnit.questionNumber}"
+            <#rt><a href="/section/#{progress.sectionId}/question/#{questionProgressUnit.questionNumber}"
                 <#t>class="btn <#if !questionProgressUnit.isAnswered()>btn-light<#elseif questionProgressUnit.isWrongAnswered()>btn-danger<#else>btn-success</#if> <#if questionProgressUnit.questionNumber == question.number>active</#if>"
                 <#t>role="button">#{questionProgressUnit.questionNumber}
             <#lt></a>
@@ -33,7 +33,7 @@
                     </#if>
                 </#list>
             </div>
-            <form action="/section/#{question.section.id}/question/#{question.number}" method="post" id="answer-form">
+            <form action="/section/#{progress.sectionId}/question/#{question.number}" method="post" id="answer-form">
                 <input type="hidden" name="_csrf" value="${_csrf.token}" />
                 <input name="answer" id="answer" type="hidden" <#if currentQuestionProgressUnit.isAnswered()>disabled</#if>/>
             </form>

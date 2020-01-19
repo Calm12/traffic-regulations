@@ -4,6 +4,7 @@ import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.services.AnswerChecker;
 import com.calm.pdd.core.services.QuestionFetcher;
+import com.calm.pdd.core.services.ResultCollector;
 import com.calm.pdd.core.services.SectionFetcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,11 +24,13 @@ public class QuestionController {
 	private SectionFetcher sectionFetcher;
 	private QuestionFetcher questionFetcher;
 	private AnswerChecker answerChecker;
+	private ResultCollector resultCollector;
 	
-	public QuestionController(SectionFetcher sectionFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker) {
+	public QuestionController(SectionFetcher sectionFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ResultCollector resultCollector) {
 		this.sectionFetcher = sectionFetcher;
 		this.questionFetcher = questionFetcher;
 		this.answerChecker = answerChecker;
+		this.resultCollector = resultCollector;
 	}
 	
 	@GetMapping("/section/{sectionId}")
@@ -69,19 +72,38 @@ public class QuestionController {
 		session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
 		
 		if(newQuestionProgress.getByNumber(questionNumber).isWrongAnswered()) {
+			//тут нужно проверить, есть ли еще неотвеченные
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}
-		else {
-			if(newQuestionProgress.hasNext(questionNumber)) {
-				return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber + 1));
-			}
-			else if(newQuestionProgress.hasUnanswered()) {
-				return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getFirstUnanswered().getQuestionNumber()));
-			}
-			else {
-				//прогресс 100%, все вопросы отвечены, гц
-				return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber)); //stub
-			}
+		else if(newQuestionProgress.hasNext(questionNumber)) {
+			//тут нужно проверить следующий именно неотвеченный
+			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber + 1));
 		}
+		else if(newQuestionProgress.hasUnanswered()) {
+			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getFirstUnanswered().getQuestionNumber()));
+		}
+		else {
+			return new ModelAndView(String.format("redirect:/questions/%s/complete", newQuestionProgress.getId()));
+		}
+	}
+	
+	@GetMapping("/questions/{progressId}/complete")
+	public ModelAndView complete(@PathVariable String progressId, HttpSession session) {
+		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		
+		if(questionProgress == null) {
+			return new ModelAndView("redirect:/sections");
+		}
+		
+		if(!questionProgress.getId().equals(progressId)) {
+			return new ModelAndView("redirect:/sections");
+		}
+		
+		ModelAndView model = new ModelAndView();
+		model.addObject("progress", questionProgress);
+		model.addObject("result", resultCollector.collect(questionProgress));
+		model.setViewName("complete");
+		
+		return model;
 	}
 }
