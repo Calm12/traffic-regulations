@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class QuestionProgress implements Serializable {
@@ -64,9 +65,18 @@ public class QuestionProgress implements Serializable {
 		}
 	}
 	
+	@Deprecated
 	public boolean hasNext(int questionNumber) {
 		//nextQuestionIndex[0...N] == questionNumber[1..N]
 		return questionNumber >= 0 && questionNumber < progressUnits.size();
+	}
+	
+	public boolean hasNextUnanswered(int questionNumber) {
+		return progressUnits.stream().skip(questionNumber).anyMatch(q -> !q.isAnswered());
+	}
+	
+	public QuestionProgressUnit getNextUnanswered(int questionNumber) {
+		return progressUnits.stream().skip(questionNumber).filter(q -> !q.isAnswered()).findFirst().orElseThrow(() -> new UnknownQuestionException("Please use QuestionProgress::hasNextUnanswered before QuestionProgress::getNextUnanswered."));
 	}
 	
 	public boolean hasUnanswered() {

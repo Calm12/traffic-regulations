@@ -73,9 +73,8 @@ public class QuestionController {
 			//если это был последний вопрос, то сделать кнопку перехода на результат, или тупо кидать на него сразу
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}
-		else if(newQuestionProgress.hasNext(questionNumber)) {
-			//тут нужно проверить следующий именно неотвеченный
-			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber + 1));
+		else if(newQuestionProgress.hasNextUnanswered(questionNumber)) {
+			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getNextUnanswered(questionNumber).getQuestionNumber()));
 		}
 		else if(newQuestionProgress.hasUnanswered()) {
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getFirstUnanswered().getQuestionNumber()));
