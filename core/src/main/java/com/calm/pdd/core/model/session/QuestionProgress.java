@@ -23,6 +23,10 @@ public class QuestionProgress implements Serializable {
 	@Getter
 	private long startTime;
 	
+	@Getter
+	@Setter
+	private Result result;
+	
 	@Setter(AccessLevel.PACKAGE)
 	@Getter
 	private SectionType sectionType;

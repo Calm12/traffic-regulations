@@ -2,6 +2,7 @@ package com.calm.pdd.core.services;
 
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
+import com.calm.pdd.core.model.session.Result;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.springframework.stereotype.Service;
 

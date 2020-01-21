@@ -2,10 +2,7 @@ package com.calm.pdd.web.controller;
 
 import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.session.QuestionProgress;
-import com.calm.pdd.core.services.AnswerChecker;
-import com.calm.pdd.core.services.QuestionFetcher;
-import com.calm.pdd.core.services.ResultCollector;
-import com.calm.pdd.core.services.SectionFetcher;
+import com.calm.pdd.core.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,9 +96,13 @@ public class QuestionController {
 			return new ModelAndView("redirect:/sections");
 		}
 		
+		if(questionProgress.getResult() == null) {
+			questionProgress.setResult(resultCollector.collect(questionProgress));
+			session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
+		}
+		
 		ModelAndView model = new ModelAndView();
 		model.addObject("progress", questionProgress);
-		model.addObject("result", resultCollector.collect(questionProgress));
 		model.setViewName("complete");
 		
 		return model;
