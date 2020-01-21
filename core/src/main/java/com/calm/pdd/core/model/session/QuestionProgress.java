@@ -88,4 +88,8 @@ public class QuestionProgress implements Serializable {
 	public boolean isFixedSection(int sectionId) {
 		return this.sectionId == sectionId && sectionType == SectionType.FIXED;
 	}
+	
+	public boolean isCompleted() {
+		return result != null;
+	}
 }

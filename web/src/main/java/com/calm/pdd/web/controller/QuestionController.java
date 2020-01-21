@@ -70,6 +70,7 @@ public class QuestionController {
 		
 		if(newQuestionProgress.getByNumber(questionNumber).isWrongAnswered()) {
 			//тут нужно проверить, есть ли еще неотвеченные
+			//если это был последний вопрос, то сделать кнопку перехода на результат, или тупо кидать на него сразу
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}
 		else if(newQuestionProgress.hasNext(questionNumber)) {
@@ -80,6 +81,9 @@ public class QuestionController {
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getFirstUnanswered().getQuestionNumber()));
 		}
 		else {
+			newQuestionProgress.setResult(resultCollector.collect(newQuestionProgress));
+			session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
+			
 			return new ModelAndView(String.format("redirect:/questions/%s/complete", newQuestionProgress.getId()));
 		}
 	}
@@ -94,11 +98,6 @@ public class QuestionController {
 		
 		if(!questionProgress.getId().equals(progressId)) {
 			return new ModelAndView("redirect:/sections");
-		}
-		
-		if(questionProgress.getResult() == null) {
-			questionProgress.setResult(resultCollector.collect(questionProgress));
-			session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		}
 		
 		ModelAndView model = new ModelAndView();
