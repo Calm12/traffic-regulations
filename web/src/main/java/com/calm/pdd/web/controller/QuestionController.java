@@ -70,7 +70,7 @@ public class QuestionController {
 		
 		if(newQuestionProgress.getByNumber(questionNumber).isWrongAnswered()) {
 			//тут нужно проверить, есть ли еще неотвеченные
-			//если это был последний вопрос, то сделать кнопку перехода на результат, или тупо кидать на него сразу
+			//если это был последний вопрос, то надо сгенерить результат
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}
 		else if(newQuestionProgress.hasNextUnanswered(questionNumber)) {

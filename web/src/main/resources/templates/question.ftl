@@ -12,6 +12,9 @@
                 <#t>role="button">#{questionProgressUnit.questionNumber}
             <#lt></a>
         </#list>
+        <#if progress.completed>
+            <a href="/questions/${progress.id}/complete" class="btn btn-info" role="button">Результат</a>
+        </#if>
     </div>
 </section>
 

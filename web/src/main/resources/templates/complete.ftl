@@ -35,6 +35,7 @@
                     Потраченное время: <span class="badge badge-secondary badge-pill">${progress.result.formattedDuration}</span>
                 </li>
             </ul>
+            <a role="button" href="/section/${progress.sectionId}/question/${progress.first.questionNumber}" class="btn btn-secondary btn-lg btn-block">Вернуться к вопросам</a>
         </div>
     </div>
 </div>
