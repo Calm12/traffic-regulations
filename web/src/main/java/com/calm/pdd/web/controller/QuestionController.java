@@ -68,9 +68,13 @@ public class QuestionController {
 		
 		session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
 		
+		//можно формировать строку редиректа, а ретурн в конце делать, тогда не придется повторять код сохранения в сессию и генерации результата
 		if(newQuestionProgress.getByNumber(questionNumber).isWrongAnswered()) {
-			//тут нужно проверить, есть ли еще неотвеченные
-			//если это был последний вопрос, то надо сгенерить результат
+			if(!newQuestionProgress.hasUnanswered()) {
+				newQuestionProgress.setResult(resultCollector.collect(newQuestionProgress));
+				session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
+			}
+			
 			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
 		}
 		else if(newQuestionProgress.hasNextUnanswered(questionNumber)) {
