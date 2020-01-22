@@ -86,23 +86,4 @@ public class QuestionController {
 		
 		return new ModelAndView(redirect);
 	}
-	
-	@GetMapping("/questions/{progressId}/complete")
-	public ModelAndView complete(@PathVariable String progressId, HttpSession session) {
-		QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
-		
-		if(progress == null) {
-			return new ModelAndView("redirect:/sections");
-		}
-		
-		if(!progress.getId().equals(progressId)) {
-			return new ModelAndView("redirect:/sections");
-		}
-		
-		ModelAndView model = new ModelAndView();
-		model.addObject("progress", progress);
-		model.setViewName("complete");
-		
-		return model;
-	}
 }
