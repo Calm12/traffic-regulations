@@ -1,7 +1,6 @@
 package com.calm.pdd.core.services;
 
 import com.calm.pdd.core.model.session.QuestionProgress;
-import com.calm.pdd.core.model.session.QuestionProgressUnit;
 import com.calm.pdd.core.model.session.Result;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,8 @@ public class ResultCollector {
 		Result result = new Result();
 		
 		result.setTotal(progress.getList().size());
-		result.setCorrect((int) progress.getList().stream().filter(q -> !q.isWrongAnswered()).count());
-		result.setWrong((int) progress.getList().stream().filter(QuestionProgressUnit::isWrongAnswered).count());
+		result.setCorrect((int) progress.getList().stream().filter(q -> q.isCorrectAnswered()).count());
+		result.setWrong((int) progress.getList().stream().filter(q -> q.isWrongAnswered()).count());
 		
 		result.setCorrectRate(Math.round((float) result.getCorrect() / result.getTotal() * 100));
 		result.setWrongRate(100 - result.getCorrectRate());
