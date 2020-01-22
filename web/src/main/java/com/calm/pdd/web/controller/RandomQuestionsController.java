@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -58,4 +60,26 @@ public class RandomQuestionsController {
 		return model;
 	}
 	
+	@PostMapping("/random/question/{questionNumber}")
+	public ModelAndView doAnswer(@PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
+		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		
+		answerChecker.checkAnswer(progress, questionNumber, answer);
+		
+		String redirect;
+		if(progress.hasNextUnanswered(questionNumber)) {
+			redirect = String.format("redirect:/random/question/%d", progress.getNextUnanswered(questionNumber).getQuestionNumber());
+		}
+		else if(progress.hasUnanswered()) {
+			redirect = String.format("redirect:/random/question/%d", progress.getFirstUnanswered().getQuestionNumber());
+		}
+		else {
+			progress.setResult(resultCollector.collect(progress));
+			redirect = String.format("redirect:/questions/%s/complete", progress.getId());
+		}
+		
+		session.setAttribute("QUESTIONS_PROGRESS", progress);
+		
+		return new ModelAndView(redirect);
+	}
 }
