@@ -24,7 +24,15 @@ public class QuestionProgressUnit implements Serializable {
 		return answerResult != AnswerResult.NOT_ANSWERED;
 	}
 	
+	public boolean isUnanswered() {
+		return !isAnswered();
+	}
+	
 	public boolean isWrongAnswered() {
 		return answerResult == AnswerResult.WRONG;
+	}
+	
+	public boolean isCorrectAnswered() {
+		return !isWrongAnswered();
 	}
 }

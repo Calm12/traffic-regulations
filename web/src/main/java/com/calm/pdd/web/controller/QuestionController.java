@@ -32,29 +32,29 @@ public class QuestionController {
 	
 	@GetMapping("/section/{sectionId}")
 	public RedirectView enterSection(@PathVariable int sectionId, HttpSession session) {
-		QuestionProgress questionProgress = sectionFetcher.fetchSection(sectionId);
+		QuestionProgress progress = sectionFetcher.fetchSection(sectionId);
 		
-		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
+		session.setAttribute("QUESTIONS_PROGRESS", progress);
 		
-		return new RedirectView(String.format("/section/%d/question/%d", sectionId, questionProgress.getFirst().getQuestionNumber()));
+		return new RedirectView(String.format("/section/%d/question/%d", sectionId, progress.getFirst().getQuestionNumber()));
 	}
 	
 	@GetMapping("/section/{sectionId}/question/{questionNumber}")
 	public ModelAndView question(ModelAndView model, @PathVariable int sectionId, @PathVariable int questionNumber, HttpSession session) {
-		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
-		if(questionProgress == null) {
+		if(progress == null) {
 			return new ModelAndView("redirect:/sections");
 		}
 		
-		if(!questionProgress.isFixedSection(sectionId)) {
+		if(!progress.isFixedSection(sectionId)) {
 			return new ModelAndView("redirect:/sections");
 		}
 		
-		Question question = questionFetcher.fetchQuestion(questionProgress, questionNumber);
+		Question question = questionFetcher.fetchQuestion(progress, questionNumber);
 		
 		model.addObject("question", question);
-		model.addObject("progress", questionProgress);
+		model.addObject("progress", progress);
 		model.setViewName("question");
 		
 		return model;
@@ -89,18 +89,18 @@ public class QuestionController {
 	
 	@GetMapping("/questions/{progressId}/complete")
 	public ModelAndView complete(@PathVariable String progressId, HttpSession session) {
-		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
-		if(questionProgress == null) {
+		if(progress == null) {
 			return new ModelAndView("redirect:/sections");
 		}
 		
-		if(!questionProgress.getId().equals(progressId)) {
+		if(!progress.getId().equals(progressId)) {
 			return new ModelAndView("redirect:/sections");
 		}
 		
 		ModelAndView model = new ModelAndView();
-		model.addObject("progress", questionProgress);
+		model.addObject("progress", progress);
 		model.setViewName("complete");
 		
 		return model;

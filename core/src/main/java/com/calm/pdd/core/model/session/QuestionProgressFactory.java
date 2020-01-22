@@ -13,21 +13,21 @@ public class QuestionProgressFactory {
 	public QuestionProgress buildProgressWithFixedSection(List<Question> questions, int sectionId) {
 		Section section = questions.get(0).getSection();
 		
-		QuestionProgress questionProgress = new QuestionProgress(buildQuestionProgressList(questions));
-		questionProgress.setSectionId(sectionId);
-		questionProgress.setProgressName(String.format("%s. %s", section.getNumber(), section.getName()));
-		questionProgress.setSectionType(SectionType.FIXED);
+		QuestionProgress progress = new QuestionProgress(buildQuestionProgressList(questions));
+		progress.setSectionId(sectionId);
+		progress.setProgressName(String.format("%s. %s", section.getNumber(), section.getName()));
+		progress.setSectionType(SectionType.FIXED);
 		
-		return questionProgress;
+		return progress;
 	}
 	
 	public QuestionProgress buildProgressWithRandomQuestions(List<Question> questions) {
-		QuestionProgress questionProgress = new QuestionProgress(buildQuestionProgressList(questions));
-		questionProgress.setSectionId(0);
-		questionProgress.setProgressName("20 случайных вопросов");
-		questionProgress.setSectionType(SectionType.RANDOM);
+		QuestionProgress progress = new QuestionProgress(buildQuestionProgressList(questions));
+		progress.setSectionId(0);
+		progress.setProgressName("20 случайных вопросов");
+		progress.setSectionType(SectionType.RANDOM);
 		
-		return questionProgress;
+		return progress;
 	}
 	
 	private List<QuestionProgressUnit> buildQuestionProgressList(List<Question> questions) {

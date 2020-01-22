@@ -18,9 +18,9 @@ public class QuestionFetcher {
 		this.questionRepository = questionRepository;
 	}
 	
-	public Question fetchQuestion(QuestionProgress questionProgress, int questionNumber) {
-		QuestionProgressUnit currentQuestionProgressUnit = questionProgress.getByNumber(questionNumber);
+	public Question fetchQuestion(QuestionProgress progress, int questionNumber) {
+		QuestionProgressUnit progressUnit = progress.getByNumber(questionNumber);
 		
-		return questionRepository.findById(currentQuestionProgressUnit.getQuestionId()).orElseThrow(() -> new UnknownQuestionException(String.format("Question %d not found!", currentQuestionProgressUnit.getQuestionId())));
+		return questionRepository.findById(progressUnit.getQuestionId()).orElseThrow(() -> new UnknownQuestionException(String.format("Question %d not found!", progressUnit.getQuestionId())));
 	}
 }
