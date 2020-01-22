@@ -10,7 +10,7 @@
                     <h4 class="text-white">Навигация</h4>
                     <ul class="list-unstyled">
                         <li><a href="/sections" class="text-white">Вопросы по темам</a></li>
-                        <li><a href="#" class="text-white">20 случайных вопросов</a></li>
+                        <li><a href="/random" class="text-white">20 случайных вопросов</a></li>
                         <#if authUser??>
                             <li>
                                 <form action="/logout" method="post">

@@ -10,7 +10,7 @@
         <#if authUser??>
             <p>
                 <a href="/sections" class="btn btn-primary my-2">Вопросы по темам</a>
-                <a href="#" class="btn btn-secondary my-2">Случайные вопросы</a>
+                <a href="/random" class="btn btn-secondary my-2">Случайные вопросы</a>
             </p>
         <#else>
             <p>
