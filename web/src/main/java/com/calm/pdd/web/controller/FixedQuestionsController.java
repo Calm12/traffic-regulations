@@ -2,6 +2,7 @@ package com.calm.pdd.web.controller;
 
 import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.session.QuestionProgress;
+import com.calm.pdd.core.model.session.QuestionProgressUnit;
 import com.calm.pdd.core.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class FixedQuestionsController {
@@ -55,18 +57,18 @@ public class FixedQuestionsController {
 	public String doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
 		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
+		boolean isAnswerCorrect = answerChecker.checkAnswer(progress, questionNumber, answer);
+		Optional<QuestionProgressUnit> nextQuestion = progress.findNextQuestion(questionNumber);
+		
 		String redirect;
-		if(!answerChecker.checkAnswer(progress, questionNumber, answer)) {
-			if(!progress.hasUnanswered()) {
+		if(!isAnswerCorrect) {
+			if(!nextQuestion.isPresent()) {
 				progress.setResult(resultCollector.collect(progress));
 			}
 			redirect = String.format("redirect:/section/%d/question/%d", sectionId, questionNumber);
 		}
-		else if(progress.hasNextUnanswered(questionNumber)) {
-			redirect = String.format("redirect:/section/%d/question/%d", sectionId, progress.getNextUnanswered(questionNumber).getQuestionNumber());
-		}
-		else if(progress.hasUnanswered()) {
-			redirect = String.format("redirect:/section/%d/question/%d", sectionId, progress.getFirstUnanswered().getQuestionNumber());
+		else if(nextQuestion.isPresent()) {
+			redirect = String.format("redirect:/section/%d/question/%d", sectionId, nextQuestion.get().getQuestionNumber());
 		}
 		else {
 			progress.setResult(resultCollector.collect(progress));

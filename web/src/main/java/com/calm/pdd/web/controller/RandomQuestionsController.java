@@ -2,6 +2,7 @@ package com.calm.pdd.web.controller;
 
 import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.session.QuestionProgress;
+import com.calm.pdd.core.model.session.QuestionProgressUnit;
 import com.calm.pdd.core.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class RandomQuestionsController {
@@ -57,13 +59,11 @@ public class RandomQuestionsController {
 		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
 		answerChecker.checkAnswer(progress, questionNumber, answer);
+		Optional<QuestionProgressUnit> nextQuestion = progress.findNextQuestion(questionNumber);
 		
 		String redirect;
-		if(progress.hasNextUnanswered(questionNumber)) {
-			redirect = String.format("redirect:/random/question/%d", progress.getNextUnanswered(questionNumber).getQuestionNumber());
-		}
-		else if(progress.hasUnanswered()) {
-			redirect = String.format("redirect:/random/question/%d", progress.getFirstUnanswered().getQuestionNumber());
+		if(nextQuestion.isPresent()) {
+			redirect = String.format("redirect:/random/question/%d", nextQuestion.get().getQuestionNumber());
 		}
 		else {
 			progress.setResult(resultCollector.collect(progress));
