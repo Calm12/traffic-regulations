@@ -41,11 +41,10 @@
                         <div class="user-icon-in-header"><i class="fa fa-user-circle"></i></div>
                         <div class="username-in-header">${authUser.username}</div></a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" href="#">Статистика</a>
+                        <a class="dropdown-item" href="#">Профиль</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
+                        <a class="dropdown-item" href="#">Продолжить</a>
                     </div>
                 </div>
             </#if>

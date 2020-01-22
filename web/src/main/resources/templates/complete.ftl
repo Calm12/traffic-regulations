@@ -1,6 +1,6 @@
 <#include "layouts/default.ftl">
 
-<#macro title>Тест</#macro>
+<#macro title>Результат</#macro>
 
 <#macro content>
 <section class="jumbotron text-center">
