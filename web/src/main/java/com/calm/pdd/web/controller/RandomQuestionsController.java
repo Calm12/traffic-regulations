@@ -5,11 +5,8 @@ import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
@@ -39,29 +36,26 @@ public class RandomQuestionsController {
 	}
 	
 	@GetMapping("/random/question/{questionNumber}")
-	public ModelAndView question(ModelAndView model, @PathVariable int questionNumber, HttpSession session) {
-		QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
-		
+	public String question(Model model, @PathVariable int questionNumber, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
 		if(progress == null) {
-			return new ModelAndView("redirect:/sections");
+			return "redirect:/sections";
 		}
 		
 		if(!progress.isRandomSet()) {
-			return new ModelAndView("redirect:/sections");
+			return "redirect:/sections";
 		}
 		
 		Question question = questionFetcher.fetchQuestion(progress, questionNumber);
 		
-		model.addObject("question", question);
-		model.addObject("currentProgressUnit", progress.getByNumber(questionNumber));
-		model.addObject("progress", progress);
-		model.setViewName("question");
+		model.addAttribute("question", question);
+		model.addAttribute("currentProgressUnit", progress.getByNumber(questionNumber));
+		model.addAttribute("progress", progress);
 		
-		return model;
+		return "question";
 	}
 	
 	@PostMapping("/random/question/{questionNumber}")
-	public ModelAndView doAnswer(@PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
+	public String doAnswer(@PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
 		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
 		answerChecker.checkAnswer(progress, questionNumber, answer);
@@ -80,6 +74,6 @@ public class RandomQuestionsController {
 		
 		session.setAttribute("QUESTIONS_PROGRESS", progress);
 		
-		return new ModelAndView(redirect);
+		return redirect;
 	}
 }

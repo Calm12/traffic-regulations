@@ -3,8 +3,8 @@ package com.calm.pdd.web.controller;
 import com.calm.pdd.core.model.entity.Section;
 import com.calm.pdd.core.services.SectionFetcher;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -18,11 +18,10 @@ public class SectionsController {
 	}
 	
 	@GetMapping("/sections")
-	public ModelAndView list(ModelAndView model) {
+	public String list(Model model) {
 		List<Section> sections = sectionFetcher.fetchSectionsList();
-		model.addObject("sections", sections);
-		model.setViewName("sections");
+		model.addAttribute("sections", sections);
 		
-		return model;
+		return "sections";
 	}
 }

@@ -5,11 +5,8 @@ import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
@@ -33,35 +30,31 @@ public class QuestionController {
 	@GetMapping("/section/{sectionId}")
 	public RedirectView enterSection(@PathVariable int sectionId, HttpSession session) {
 		QuestionProgress progress = sectionFetcher.fetchSection(sectionId);
-		
 		session.setAttribute("QUESTIONS_PROGRESS", progress);
 		
 		return new RedirectView(String.format("/section/%d/question/%d", sectionId, progress.getFirst().getQuestionNumber()));
 	}
 	
 	@GetMapping("/section/{sectionId}/question/{questionNumber}")
-	public ModelAndView question(ModelAndView model, @PathVariable int sectionId, @PathVariable int questionNumber, HttpSession session) {
-		QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
-		
+	public String question(Model model, @PathVariable int sectionId, @PathVariable int questionNumber, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
 		if(progress == null) {
-			return new ModelAndView("redirect:/sections");
+			return "redirect:/sections";
 		}
 		
 		if(!progress.isFixedSection(sectionId)) {
-			return new ModelAndView("redirect:/sections");
+			return "redirect:/sections";
 		}
 		
 		Question question = questionFetcher.fetchQuestion(progress, questionNumber);
 		
-		model.addObject("question", question);
-		model.addObject("progress", progress);
-		model.setViewName("question");
+		model.addAttribute("question", question);
+		model.addAttribute("progress", progress);
 		
-		return model;
+		return "question";
 	}
 	
 	@PostMapping("/section/{sectionId}/question/{questionNumber}")
-	public ModelAndView doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
+	public String doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
 		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
 		String redirect;
@@ -84,6 +77,6 @@ public class QuestionController {
 		
 		session.setAttribute("QUESTIONS_PROGRESS", progress);
 		
-		return new ModelAndView(redirect);
+		return redirect;
 	}
 }
