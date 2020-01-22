@@ -62,33 +62,29 @@ public class QuestionController {
 	
 	@PostMapping("/section/{sectionId}/question/{questionNumber}")
 	public ModelAndView doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
-		QuestionProgress questionProgress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
+		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
-		QuestionProgress newQuestionProgress = answerChecker.checkAnswer(questionProgress, questionNumber, answer);
-		
-		session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
-		
-		//можно формировать строку редиректа, а ретурн в конце делать, тогда не придется повторять код сохранения в сессию и генерации результата
-		if(newQuestionProgress.getByNumber(questionNumber).isWrongAnswered()) {
-			if(!newQuestionProgress.hasUnanswered()) {
-				newQuestionProgress.setResult(resultCollector.collect(newQuestionProgress));
-				session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
+		String redirect;
+		if(!answerChecker.checkAnswer(progress, questionNumber, answer)) {
+			if(!progress.hasUnanswered()) {
+				progress.setResult(resultCollector.collect(progress));
 			}
-			
-			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, questionNumber));
+			redirect = String.format("redirect:/section/%d/question/%d", sectionId, questionNumber);
 		}
-		else if(newQuestionProgress.hasNextUnanswered(questionNumber)) {
-			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getNextUnanswered(questionNumber).getQuestionNumber()));
+		else if(progress.hasNextUnanswered(questionNumber)) {
+			redirect = String.format("redirect:/section/%d/question/%d", sectionId, progress.getNextUnanswered(questionNumber).getQuestionNumber());
 		}
-		else if(newQuestionProgress.hasUnanswered()) {
-			return new ModelAndView(String.format("redirect:/section/%d/question/%d", sectionId, newQuestionProgress.getFirstUnanswered().getQuestionNumber()));
+		else if(progress.hasUnanswered()) {
+			redirect = String.format("redirect:/section/%d/question/%d", sectionId, progress.getFirstUnanswered().getQuestionNumber());
 		}
 		else {
-			newQuestionProgress.setResult(resultCollector.collect(newQuestionProgress));
-			session.setAttribute("QUESTIONS_PROGRESS", newQuestionProgress);
-			
-			return new ModelAndView(String.format("redirect:/questions/%s/complete", newQuestionProgress.getId()));
+			progress.setResult(resultCollector.collect(progress));
+			redirect = String.format("redirect:/questions/%s/complete", progress.getId());
 		}
+		
+		session.setAttribute("QUESTIONS_PROGRESS", progress);
+		
+		return new ModelAndView(redirect);
 	}
 	
 	@GetMapping("/questions/{progressId}/complete")

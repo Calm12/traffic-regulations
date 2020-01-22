@@ -18,18 +18,22 @@ public class AnswerChecker {
 		this.questionRepository = questionRepository;
 	}
 	
-	public QuestionProgress checkAnswer(QuestionProgress questionProgress, int questionNumber, int answer) {
-		QuestionProgressUnit currentQuestionProgressUnit = questionProgress.getByNumber(questionNumber);
-		Question question = questionRepository.findById(currentQuestionProgressUnit.getQuestionId()).orElseThrow(() -> new RuntimeException(String.format("Question %d not found!", currentQuestionProgressUnit.getQuestionId())));
+	/**
+	 * Mutates the passed QuestionProgress object.
+	 * @return boolean correct/wrong answer
+	 */
+	public boolean checkAnswer(QuestionProgress progress, int questionNumber, int answer) {
+		QuestionProgressUnit progressUnit = progress.getByNumber(questionNumber);
+		Question question = questionRepository.findById(progressUnit.getQuestionId()).orElseThrow(() -> new RuntimeException(String.format("Question %d not found!", progressUnit.getQuestionId())));
 		
 		if(question.getAnswer() == answer) {
-			currentQuestionProgressUnit.setAnswerResult(AnswerResult.CORRECT);
+			progressUnit.setAnswerResult(AnswerResult.CORRECT);
 		}
 		else {
-			currentQuestionProgressUnit.setAnswerResult(AnswerResult.WRONG);
+			progressUnit.setAnswerResult(AnswerResult.WRONG);
 		}
-		currentQuestionProgressUnit.setAnsweredNumber(answer);
+		progressUnit.setAnsweredNumber(answer);
 		
-		return questionProgress;
+		return progressUnit.isCorrectAnswered();
 	}
 }
