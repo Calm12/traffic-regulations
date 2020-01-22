@@ -3,7 +3,6 @@ package com.calm.pdd.web.controller;
 import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.services.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@Slf4j
 public class RandomQuestionsController {
 	
 	private RandomSetFetcher randomSetFetcher;
