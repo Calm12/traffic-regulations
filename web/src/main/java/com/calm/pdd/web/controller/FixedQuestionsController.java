@@ -11,14 +11,14 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class QuestionController {
+public class FixedQuestionsController {
 	
 	private SectionFetcher sectionFetcher;
 	private QuestionFetcher questionFetcher;
 	private AnswerChecker answerChecker;
 	private ResultCollector resultCollector;
 	
-	public QuestionController(SectionFetcher sectionFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ResultCollector resultCollector) {
+	public FixedQuestionsController(SectionFetcher sectionFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ResultCollector resultCollector) {
 		this.sectionFetcher = sectionFetcher;
 		this.questionFetcher = questionFetcher;
 		this.answerChecker = answerChecker;
