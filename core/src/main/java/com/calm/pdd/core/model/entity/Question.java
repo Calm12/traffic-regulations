@@ -2,6 +2,7 @@ package com.calm.pdd.core.model.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 @Entity
 @Table(name = "questions")
 public class Question {
