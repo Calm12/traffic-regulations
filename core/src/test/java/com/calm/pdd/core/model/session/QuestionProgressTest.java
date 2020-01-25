@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +20,7 @@ public class QuestionProgressTest {
 	private QuestionProgress progress;
 	
 	@BeforeEach
-	public void setUp() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public void setUp() {
 		List<QuestionProgressUnit> progressUnits = Arrays.asList(
 				new QuestionProgressUnit(51, 1).setAnswerResult(AnswerResult.WRONG),
 				new QuestionProgressUnit(52, 2).setAnswerResult(AnswerResult.CORRECT),
@@ -36,9 +34,7 @@ public class QuestionProgressTest {
 				new QuestionProgressUnit(60, 10).setAnswerResult(AnswerResult.WRONG)
 		);
 		
-		Constructor<QuestionProgress> constructor = QuestionProgress.class.getDeclaredConstructor(List.class);
-		constructor.setAccessible(true);
-		progress = constructor.newInstance(progressUnits);
+		progress = new QuestionProgress(progressUnits);
 	}
 	
 	@Test
