@@ -2,10 +2,12 @@ package com.calm.pdd.core.model.dto;
 
 import com.calm.pdd.core.model.validation.annotations.PasswordMatches;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.*;
 
 @Data
+@Accessors(chain = true)
 @PasswordMatches(message = "{user.password.matching.failed}")
 public class UserDto {
 	
