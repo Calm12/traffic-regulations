@@ -33,6 +33,7 @@
 <script src="/webjars/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
 <script src="/webjars/alertifyjs/1.4.1/build/alertify.min.js"></script>
 <script src="/js/main.js"></script>
+<#if flash??><script>alertify.error('${flash}');</script></#if>
 </body>
 </html>
 </#macro>

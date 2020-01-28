@@ -12,10 +12,6 @@ public class ResultController {
 	
 	@GetMapping("/questions/{progressId}/complete")
 	public String complete(Model model, @PathVariable String progressId, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
-		if(progress == null) {
-			return "redirect:/sections";
-		}
-		
 		if(!progress.getId().equals(progressId)) {
 			return "redirect:/sections";
 		}

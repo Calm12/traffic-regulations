@@ -37,10 +37,6 @@ public class RandomQuestionsController {
 	
 	@GetMapping("/random/question/{questionNumber}")
 	public String question(Model model, @PathVariable int questionNumber, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
-		if(progress == null) {
-			return "redirect:/sections";
-		}
-		
 		if(!progress.isRandomSet()) {
 			return "redirect:/sections";
 		}

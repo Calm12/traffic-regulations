@@ -37,10 +37,6 @@ public class FixedQuestionsController {
 	
 	@GetMapping("/section/{sectionId}/question/{questionNumber}")
 	public String question(Model model, @PathVariable int sectionId, @PathVariable int questionNumber, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
-		if(progress == null) {
-			return "redirect:/sections";
-		}
-		
 		if(!progress.isFixedSection(sectionId)) {
 			return "redirect:/sections";
 		}
