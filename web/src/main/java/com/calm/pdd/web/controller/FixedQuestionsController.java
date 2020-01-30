@@ -1,9 +1,11 @@
 package com.calm.pdd.web.controller;
 
 import com.calm.pdd.core.model.entity.Question;
+import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
 import com.calm.pdd.core.services.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -50,10 +52,10 @@ public class FixedQuestionsController {
 	}
 	
 	@PostMapping("/section/{sectionId}/question/{questionNumber}")
-	public String doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session) {
+	public String doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session, @AuthenticationPrincipal User user) {
 		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
-		boolean isAnswerCorrect = answerChecker.checkAnswer(progress, questionNumber, answer);
+		boolean isAnswerCorrect = answerChecker.checkAnswer(progress, questionNumber, answer, user);
 		Optional<QuestionProgressUnit> nextQuestion = progress.findNextQuestion(questionNumber);
 		
 		String redirect;

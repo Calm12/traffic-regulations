@@ -1,6 +1,7 @@
 package com.calm.pdd.web.controller;
 
 import com.calm.pdd.core.model.entity.Question;
+import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
 import com.calm.pdd.core.model.session.Result;
@@ -113,7 +114,7 @@ public class FixedQuestionsControllerTest {
 	
 	@Test
 	void doAnswerCorrectActionAndHasNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(questionProgress, 1, 3)).thenReturn(true);
+		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(true);
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.of(nextQuestionProgressUnit));
 		when(nextQuestionProgressUnit.getQuestionNumber()).thenReturn(2);
 		
@@ -130,7 +131,7 @@ public class FixedQuestionsControllerTest {
 	
 	@Test
 	void doAnswerCorrectActionAndHasNotNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(questionProgress, 1, 3)).thenReturn(true);
+		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(true);
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.empty());
 		when(questionProgress.getId()).thenReturn("1234567");
 		when(resultCollector.collect(questionProgress)).thenReturn(result);
@@ -148,7 +149,7 @@ public class FixedQuestionsControllerTest {
 	
 	@Test
 	void doAnswerWrongActionAndHasNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(questionProgress, 1, 3)).thenReturn(false);
+		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(false);
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.of(nextQuestionProgressUnit));
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
@@ -164,7 +165,7 @@ public class FixedQuestionsControllerTest {
 	
 	@Test
 	void doAnswerWrongActionAndHasNotNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(questionProgress, 1, 3)).thenReturn(false);
+		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(false);
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.empty());
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);

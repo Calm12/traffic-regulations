@@ -1,6 +1,7 @@
 package com.calm.pdd.core.services;
 
 import com.calm.pdd.core.model.entity.Question;
+import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.enums.AnswerResult;
 import com.calm.pdd.core.model.repository.QuestionRepository;
 import com.calm.pdd.core.model.session.QuestionProgress;
@@ -14,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +48,7 @@ class AnswerCheckerTest {
 	
 	@Test
 	void checkCorrectAnswer() {
-		answerChecker.checkAnswer(questionProgress, 1, 15);
+		answerChecker.checkAnswer(questionProgress, 1, 15, mock(User.class));
 		
 		verify(questionProgressUnit).setAnswerResult(AnswerResult.CORRECT);
 		verify(questionProgressUnit).setAnsweredNumber(15);
@@ -56,7 +56,7 @@ class AnswerCheckerTest {
 	
 	@Test
 	void checkWrongAnswer() {
-		answerChecker.checkAnswer(questionProgress, 1, 20);
+		answerChecker.checkAnswer(questionProgress, 1, 20, mock(User.class));
 		
 		verify(questionProgressUnit).setAnswerResult(AnswerResult.WRONG);
 		verify(questionProgressUnit).setAnsweredNumber(20);
@@ -67,6 +67,6 @@ class AnswerCheckerTest {
 		when(questionRepository.findById(123)).thenReturn(Optional.empty());
 		
 		AnswerChecker answerChecker = new AnswerChecker(questionRepository);
-		assertThrows(RuntimeException.class, () -> answerChecker.checkAnswer(questionProgress, 1, 15));
+		assertThrows(RuntimeException.class, () -> answerChecker.checkAnswer(questionProgress, 1, 15, mock(User.class)));
 	}
 }

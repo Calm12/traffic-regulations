@@ -1,6 +1,7 @@
 package com.calm.pdd.core.services;
 
 import com.calm.pdd.core.model.entity.Question;
+import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.enums.AnswerResult;
 import com.calm.pdd.core.model.repository.QuestionRepository;
 import com.calm.pdd.core.model.session.QuestionProgress;
@@ -22,7 +23,7 @@ public class AnswerChecker {
 	 * Mutates the passed QuestionProgress object.
 	 * @return boolean correct/wrong answer
 	 */
-	public boolean checkAnswer(QuestionProgress progress, int questionNumber, int answer) {
+	public boolean checkAnswer(QuestionProgress progress, int questionNumber, int answer, User user) {
 		QuestionProgressUnit progressUnit = progress.getByNumber(questionNumber);
 		Question question = questionRepository.findById(progressUnit.getQuestionId()).orElseThrow(() -> new RuntimeException(String.format("Question %d not found!", progressUnit.getQuestionId())));
 		
