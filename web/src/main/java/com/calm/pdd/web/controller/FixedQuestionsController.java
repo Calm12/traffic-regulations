@@ -20,13 +20,13 @@ public class FixedQuestionsController {
 	private SectionFetcher sectionFetcher;
 	private QuestionFetcher questionFetcher;
 	private AnswerChecker answerChecker;
-	private ResultCollector resultCollector;
+	private ProgressCompleteHandler progressCompleteHandler;
 	
-	public FixedQuestionsController(SectionFetcher sectionFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ResultCollector resultCollector) {
+	public FixedQuestionsController(SectionFetcher sectionFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ProgressCompleteHandler progressCompleteHandler) {
 		this.sectionFetcher = sectionFetcher;
 		this.questionFetcher = questionFetcher;
 		this.answerChecker = answerChecker;
-		this.resultCollector = resultCollector;
+		this.progressCompleteHandler = progressCompleteHandler;
 	}
 	
 	@GetMapping("/section/{sectionId}")
@@ -61,7 +61,7 @@ public class FixedQuestionsController {
 		String redirect;
 		if(!isAnswerCorrect) {
 			if(!nextQuestion.isPresent()) {
-				progress.setResult(resultCollector.collect(progress));
+				progressCompleteHandler.handle(progress, user);
 			}
 			redirect = String.format("redirect:/section/%d/question/%d", sectionId, questionNumber);
 		}
@@ -69,7 +69,7 @@ public class FixedQuestionsController {
 			redirect = String.format("redirect:/section/%d/question/%d", sectionId, nextQuestion.get().getQuestionNumber());
 		}
 		else {
-			progress.setResult(resultCollector.collect(progress));
+			progressCompleteHandler.handle(progress, user);
 			redirect = String.format("redirect:/questions/%s/complete", progress.getId());
 		}
 		

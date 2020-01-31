@@ -4,11 +4,7 @@ import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
-import com.calm.pdd.core.model.session.Result;
-import com.calm.pdd.core.services.AnswerChecker;
-import com.calm.pdd.core.services.QuestionFetcher;
-import com.calm.pdd.core.services.ResultCollector;
-import com.calm.pdd.core.services.SectionFetcher;
+import com.calm.pdd.core.services.*;
 import com.calm.pdd.web.controller.exception.BaseExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +41,7 @@ public class FixedQuestionsControllerTest {
 	private AnswerChecker answerChecker;
 	
 	@Mock
-	private ResultCollector resultCollector;
+	private ProgressCompleteHandler progressCompleteHandler;
 
 	@Mock
 	private QuestionProgress questionProgress;
@@ -59,14 +55,11 @@ public class FixedQuestionsControllerTest {
 	@Mock
 	private Question question;
 	
-	@Mock
-	private Result result;
-	
 	@BeforeEach
 	public void setUp() {
 		session = spy(new MockHttpSession());
 		
-		mockMvc = MockMvcBuilders.standaloneSetup(new FixedQuestionsController(sectionFetcher, questionFetcher, answerChecker, resultCollector))
+		mockMvc = MockMvcBuilders.standaloneSetup(new FixedQuestionsController(sectionFetcher, questionFetcher, answerChecker, progressCompleteHandler))
 				.setControllerAdvice(BaseExceptionHandler.class)
 				.build();
 	}
@@ -125,7 +118,7 @@ public class FixedQuestionsControllerTest {
 				.andExpect(redirectedUrl("/section/10/question/2"))
 				.andReturn();
 		
-		verify(questionProgress, never()).setResult(any());
+		verify(progressCompleteHandler, never()).handle(eq(questionProgress), any(User.class));
 		verify(session, times(2)).setAttribute("QUESTIONS_PROGRESS", questionProgress);
 	}
 	
@@ -134,7 +127,6 @@ public class FixedQuestionsControllerTest {
 		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(true);
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.empty());
 		when(questionProgress.getId()).thenReturn("1234567");
-		when(resultCollector.collect(questionProgress)).thenReturn(result);
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		
@@ -143,7 +135,7 @@ public class FixedQuestionsControllerTest {
 				.andExpect(redirectedUrl("/questions/1234567/complete"))
 				.andReturn();
 		
-		verify(questionProgress).setResult(result);
+		verify(progressCompleteHandler).handle(eq(questionProgress), any(User.class));
 		verify(session, times(2)).setAttribute("QUESTIONS_PROGRESS", questionProgress);
 	}
 	
@@ -159,7 +151,7 @@ public class FixedQuestionsControllerTest {
 				.andExpect(redirectedUrl("/section/10/question/1"))
 				.andReturn();
 		
-		verify(questionProgress, never()).setResult(any());
+		verify(progressCompleteHandler, never()).handle(eq(questionProgress), any(User.class));
 		verify(session, times(2)).setAttribute("QUESTIONS_PROGRESS", questionProgress);
 	}
 	
@@ -175,7 +167,7 @@ public class FixedQuestionsControllerTest {
 				.andExpect(redirectedUrl("/section/10/question/1"))
 				.andReturn();
 		
-		verify(questionProgress).setResult(any());
+		verify(progressCompleteHandler).handle(eq(questionProgress), any(User.class));
 		verify(session, times(2)).setAttribute("QUESTIONS_PROGRESS", questionProgress);
 	}
 }

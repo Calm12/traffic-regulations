@@ -20,13 +20,13 @@ public class RandomQuestionsController {
 	private RandomSetFetcher randomSetFetcher;
 	private QuestionFetcher questionFetcher;
 	private AnswerChecker answerChecker;
-	private ResultCollector resultCollector;
+	private ProgressCompleteHandler progressCompleteHandler;
 	
-	public RandomQuestionsController(RandomSetFetcher randomSetFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ResultCollector resultCollector) {
+	public RandomQuestionsController(RandomSetFetcher randomSetFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ProgressCompleteHandler progressCompleteHandler) {
 		this.randomSetFetcher = randomSetFetcher;
 		this.questionFetcher = questionFetcher;
 		this.answerChecker = answerChecker;
-		this.resultCollector = resultCollector;
+		this.progressCompleteHandler = progressCompleteHandler;
 	}
 	
 	@GetMapping("/random")
@@ -64,7 +64,7 @@ public class RandomQuestionsController {
 			redirect = String.format("redirect:/random/question/%d", nextQuestion.get().getQuestionNumber());
 		}
 		else {
-			progress.setResult(resultCollector.collect(progress));
+			progressCompleteHandler.handle(progress, user);
 			redirect = String.format("redirect:/questions/%s/complete", progress.getId());
 		}
 		

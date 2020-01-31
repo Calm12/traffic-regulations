@@ -1,9 +1,9 @@
 package com.calm.pdd.web.controller;
 
 import com.calm.pdd.core.model.entity.Question;
+import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
-import com.calm.pdd.core.model.session.Result;
 import com.calm.pdd.core.services.*;
 import com.calm.pdd.web.controller.exception.BaseExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ public class RandomQuestionsControllerTest {
 	private AnswerChecker answerChecker;
 	
 	@Mock
-	private ResultCollector resultCollector;
+	private ProgressCompleteHandler progressCompleteHandler;
 
 	@Mock
 	private QuestionProgress questionProgress;
@@ -55,14 +55,11 @@ public class RandomQuestionsControllerTest {
 	@Mock
 	private Question question;
 	
-	@Mock
-	private Result result;
-	
 	@BeforeEach
 	public void setUp() {
 		session = spy(new MockHttpSession());
 		
-		mockMvc = MockMvcBuilders.standaloneSetup(new RandomQuestionsController(randomSetFetcher, questionFetcher, answerChecker, resultCollector))
+		mockMvc = MockMvcBuilders.standaloneSetup(new RandomQuestionsController(randomSetFetcher, questionFetcher, answerChecker, progressCompleteHandler))
 				.setControllerAdvice(BaseExceptionHandler.class)
 				.build();
 	}
@@ -122,7 +119,7 @@ public class RandomQuestionsControllerTest {
 				.andExpect(redirectedUrl("/random/question/2"))
 				.andReturn();
 		
-		verify(questionProgress, never()).setResult(any());
+		verify(progressCompleteHandler, never()).handle(eq(questionProgress), any(User.class));
 		verify(session, times(2)).setAttribute("QUESTIONS_PROGRESS", questionProgress);
 	}
 	
@@ -130,7 +127,6 @@ public class RandomQuestionsControllerTest {
 	void doAnswerActionAndHasNotNextQuestion() throws Exception {
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.empty());
 		when(questionProgress.getId()).thenReturn("1234567");
-		when(resultCollector.collect(questionProgress)).thenReturn(result);
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		
@@ -139,7 +135,7 @@ public class RandomQuestionsControllerTest {
 				.andExpect(redirectedUrl("/questions/1234567/complete"))
 				.andReturn();
 		
-		verify(questionProgress).setResult(result);
+		verify(progressCompleteHandler).handle(eq(questionProgress), any(User.class));
 		verify(session, times(2)).setAttribute("QUESTIONS_PROGRESS", questionProgress);
 	}
 }
