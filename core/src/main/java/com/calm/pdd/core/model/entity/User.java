@@ -45,9 +45,11 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private Set<Role> roles;
 	
+	@Column(columnDefinition="DATETIME")
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
+	@Column(columnDefinition="DATETIME")
 	@UpdateTimestamp
 	private LocalDateTime modifiedAt;
 	

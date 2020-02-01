@@ -6,6 +6,7 @@ import com.calm.pdd.core.model.dto.UserDto;
 import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.enums.Role;
 import com.calm.pdd.core.model.repository.UserRepository;
+import com.calm.pdd.core.model.repository.UserStatisticRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ class UserServiceTest {
 	private UserRepository userRepository;
 	
 	@Mock
+	private UserStatisticRepository userStatisticRepository;
+	
+	@Mock
 	private PasswordEncoder passwordEncoder;
 	
 	@Mock
@@ -52,7 +56,7 @@ class UserServiceTest {
 		userDto.setEmail("john@gmail.com");
 		userDto.setPassword("123456");
 		
-		userService = new UserService(userRepository, passwordEncoder);
+		userService = new UserService(userRepository, passwordEncoder, userStatisticRepository);
 	}
 	
 	@Test

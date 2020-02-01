@@ -4,8 +4,10 @@ import com.calm.pdd.core.exceptions.EmailExistsException;
 import com.calm.pdd.core.exceptions.UserExistsException;
 import com.calm.pdd.core.model.dto.UserDto;
 import com.calm.pdd.core.model.entity.User;
+import com.calm.pdd.core.model.entity.UserStatistic;
 import com.calm.pdd.core.model.enums.Role;
 import com.calm.pdd.core.model.repository.UserRepository;
+import com.calm.pdd.core.model.repository.UserStatisticRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,10 +19,12 @@ public class UserService implements IUserRegistrationService, UserDetailsService
 	
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UserStatisticRepository userStatisticRepository;
 	
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserStatisticRepository userStatisticRepository) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.userStatisticRepository = userStatisticRepository;
 	}
 	
 	@Override
@@ -34,7 +38,11 @@ public class UserService implements IUserRegistrationService, UserDetailsService
 				.setActive(true)
 				.addRole(Role.USER);
 		
-		return userRepository.save(user);
+		User saved = userRepository.save(user);
+		
+		userStatisticRepository.save(new UserStatistic(saved.getId()));
+		
+		return saved;
 	}
 	
 	@Override

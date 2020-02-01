@@ -14,8 +14,11 @@ public class ProgressCompleteHandler {
 	}
 	
 	public Result handle(QuestionProgress progress, User user) {
-		progress.setResult(resultCollector.collect(progress));
+		Result result = resultCollector.collect(progress);
+		progress.setResult(result);
 		
-		return progress.getResult();
+		//тут можно смело ебашить стату юзеру (крмое п4)
+		
+		return result;
 	}
 }
