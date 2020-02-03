@@ -14,6 +14,6 @@ public class Result implements Serializable {
 	private int wrong;
 	private int correctRate;
 	private int wrongRate;
-	private long duration;
+	private int duration;
 	private String formattedDuration;
 }

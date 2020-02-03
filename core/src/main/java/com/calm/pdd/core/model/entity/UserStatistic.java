@@ -38,4 +38,20 @@ public class UserStatistic {
 	public UserStatistic(int userId) {
 		this.userId = userId;
 	}
+	
+	public void addToTotalTestingTime(int newDuration) {
+		totalTestingTime += newDuration;
+	}
+	
+	public void incrementSuccessExamAttempts() {
+		successExamAttempts += 1;
+	}
+	
+	public void incrementExamAttemptsWithoutErrors() {
+		examAttemptsWithoutErrors += 1;
+	}
+	
+	public void incrementTotalExamAttempts() {
+		totalExamAttempts += 1;
+	}
 }

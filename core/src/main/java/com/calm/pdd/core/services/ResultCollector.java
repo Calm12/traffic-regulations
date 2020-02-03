@@ -18,7 +18,7 @@ public class ResultCollector {
 		result.setCorrectRate(Math.round((float) result.getCorrect() / result.getTotal() * 100));
 		result.setWrongRate(100 - result.getCorrectRate());
 		
-		result.setDuration(System.currentTimeMillis() - progress.getStartTime());
+		result.setDuration((int)(System.currentTimeMillis() - progress.getStartTime()));
 		result.setFormattedDuration(humanizeDuration(result.getDuration()));
 		
 		return result;
