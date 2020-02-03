@@ -55,6 +55,10 @@ public class FixedQuestionsController {
 	public String doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session, @AuthenticationPrincipal User user) {
 		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
+		if(progress.getByNumber(questionNumber).isAnswered()) {
+			return String.format("redirect:/section/%d/question/%d", sectionId, questionNumber);
+		}
+		
 		boolean isAnswerCorrect = answerChecker.checkAnswer(progress, questionNumber, answer, user);
 		Optional<QuestionProgressUnit> nextQuestion = progress.findNextQuestion(questionNumber);
 		
