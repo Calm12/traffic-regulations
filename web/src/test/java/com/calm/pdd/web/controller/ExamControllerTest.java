@@ -25,14 +25,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-public class FixedQuestionsControllerTest {
+public class ExamControllerTest {
 	
 	private MockMvc mockMvc;
 	
 	private MockHttpSession session;
 	
 	@Mock
-	private SectionFetcher sectionFetcher;
+	private ExamSetFetcher examSetFetcher;
 	
 	@Mock
 	private QuestionFetcher questionFetcher;
@@ -60,20 +60,20 @@ public class FixedQuestionsControllerTest {
 		session = spy(new MockHttpSession());
 		lenient().when(questionProgress.getByNumber(1)).thenReturn(questionProgressUnit);
 		
-		mockMvc = MockMvcBuilders.standaloneSetup(new FixedQuestionsController(sectionFetcher, questionFetcher, answerChecker, progressCompleteHandler))
+		mockMvc = MockMvcBuilders.standaloneSetup(new ExamController(examSetFetcher, questionFetcher, answerChecker, progressCompleteHandler))
 				.setControllerAdvice(BaseExceptionHandler.class)
 				.build();
 	}
 	
 	@Test
 	void successEnterSectionAction() throws Exception {
-		when(sectionFetcher.fetchSection(10)).thenReturn(questionProgress);
+		when(examSetFetcher.fetchSet()).thenReturn(questionProgress);
 		when(questionProgress.getFirst()).thenReturn(questionProgressUnit);
 		when(questionProgressUnit.getQuestionNumber()).thenReturn(1);
 		
-		mockMvc.perform(get("/section/10/").session(session))
+		mockMvc.perform(get("/exam").session(session))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/section/10/question/1"))
+				.andExpect(redirectedUrl("/exam/question/1"))
 				.andReturn();
 		
 		assertThat(session.getAttribute("QUESTIONS_PROGRESS")).isEqualTo(questionProgress);
@@ -82,13 +82,15 @@ public class FixedQuestionsControllerTest {
 	@Test
 	void successShowQuestionAction() throws Exception {
 		when(questionFetcher.fetchQuestion(questionProgress, 1)).thenReturn(question);
-		when(questionProgress.isFixedSection(10)).thenReturn(true);
+		when(questionProgress.getByNumber(1)).thenReturn(questionProgressUnit);
+		when(questionProgress.isExam()).thenReturn(true);
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		
-		mockMvc.perform(get("/section/10/question/1/").session(session))
+		mockMvc.perform(get("/exam/question/1/").session(session))
 				.andExpect(status().isOk())
 				.andExpect(model().attribute("question", question))
+				.andExpect(model().attribute("currentProgressUnit", questionProgressUnit))
 				.andExpect(model().attribute("progress", questionProgress))
 				.andExpect(view().name("question"))
 				.andReturn();
@@ -96,27 +98,26 @@ public class FixedQuestionsControllerTest {
 	
 	@Test
 	void showQuestionActionWithWrongSectionInProgress() throws Exception {
-		when(questionProgress.isFixedSection(10)).thenReturn(false);
+		when(questionProgress.isExam()).thenReturn(false);
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		
-		mockMvc.perform(get("/section/10/question/1/").session(session))
+		mockMvc.perform(get("/exam/question/1/").session(session))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/sections"))
 				.andReturn();
 	}
 	
 	@Test
-	void doAnswerCorrectActionAndHasNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(true);
+	void doAnswerActionAndHasNextQuestion() throws Exception {
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.of(nextQuestionProgressUnit));
 		when(nextQuestionProgressUnit.getQuestionNumber()).thenReturn(2);
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		
-		mockMvc.perform(post("/section/10/question/1/").param("answer", "3").session(session))
+		mockMvc.perform(post("/exam/question/1/").param("answer", "3").session(session))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/section/10/question/2"))
+				.andExpect(redirectedUrl("/exam/question/2"))
 				.andReturn();
 		
 		verify(progressCompleteHandler, never()).handle(eq(questionProgress), any(User.class));
@@ -124,14 +125,13 @@ public class FixedQuestionsControllerTest {
 	}
 	
 	@Test
-	void doAnswerCorrectActionAndHasNotNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(true);
+	void doAnswerActionAndHasNotNextQuestion() throws Exception {
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.empty());
 		when(questionProgress.getId()).thenReturn("1234567");
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		
-		mockMvc.perform(post("/section/10/question/1/").param("answer", "3").session(session))
+		mockMvc.perform(post("/exam/question/1/").param("answer", "3").session(session))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/questions/1234567/result"))
 				.andReturn();
@@ -141,31 +141,16 @@ public class FixedQuestionsControllerTest {
 	}
 	
 	@Test
-	void doAnswerWrongActionAndHasNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(false);
+	void doAnswerActionAndHasTwoErrorsNow() throws Exception {
 		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.of(nextQuestionProgressUnit));
+		when(questionProgress.getId()).thenReturn("1234567");
+		when(questionProgress.hasTwoErrors()).thenReturn(true);
 		
 		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
 		
-		mockMvc.perform(post("/section/10/question/1/").param("answer", "3").session(session))
+		mockMvc.perform(post("/exam/question/1/").param("answer", "3").session(session))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/section/10/question/1"))
-				.andReturn();
-		
-		verify(progressCompleteHandler, never()).handle(eq(questionProgress), any(User.class));
-		verify(session, times(2)).setAttribute("QUESTIONS_PROGRESS", questionProgress);
-	}
-	
-	@Test
-	void doAnswerWrongActionAndHasNotNextQuestion() throws Exception {
-		when(answerChecker.checkAnswer(eq(questionProgress), eq(1), eq(3), any(User.class))).thenReturn(false);
-		when(questionProgress.findNextQuestion(1)).thenReturn(Optional.empty());
-		
-		session.setAttribute("QUESTIONS_PROGRESS", questionProgress);
-		
-		mockMvc.perform(post("/section/10/question/1/").param("answer", "3").session(session))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/section/10/question/1"))
+				.andExpect(redirectedUrl("/questions/1234567/result"))
 				.andReturn();
 		
 		verify(progressCompleteHandler).handle(eq(questionProgress), any(User.class));

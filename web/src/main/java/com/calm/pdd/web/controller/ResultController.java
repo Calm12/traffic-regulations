@@ -10,13 +10,17 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @Controller
 public class ResultController {
 	
-	@GetMapping("/questions/{progressId}/complete")
-	public String complete(Model model, @PathVariable String progressId, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
+	@GetMapping("/questions/{progressId}/result")
+	public String show(Model model, @PathVariable String progressId, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
 		if(!progress.getId().equals(progressId)) {
 			return "redirect:/sections";
 		}
 		
 		model.addAttribute("progress", progress);
+		
+		if(progress.isExam() && progress.hasTwoErrors()) {
+			return "fail";
+		}
 		
 		return "complete";
 	}

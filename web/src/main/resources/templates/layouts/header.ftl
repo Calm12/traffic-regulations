@@ -41,6 +41,7 @@
                         <div class="user-icon-in-header"><i class="fa fa-user-circle"></i></div>
                         <div class="username-in-header">${authUser.username}</div></a>
                     <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/exam">Экзамен</a>
                         <a class="dropdown-item" href="#">Статистика</a>
                         <a class="dropdown-item" href="#">Профиль</a>
                         <div class="dropdown-divider"></div>

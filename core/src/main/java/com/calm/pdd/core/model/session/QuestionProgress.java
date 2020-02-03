@@ -93,12 +93,24 @@ public class QuestionProgress implements Serializable {
 		return Optional.empty();
 	}
 	
+	public boolean hasTwoErrors() {
+		return progressUnits.stream().filter(q -> q.isWrongAnswered()).count() >= 2;
+	}
+	
+	public boolean hasNoErrors() {
+		return progressUnits.stream().noneMatch(q -> q.isWrongAnswered());
+	}
+	
 	public List<QuestionProgressUnit> getList() {
 		return progressUnits;
 	}
 	
 	public boolean isRandomSet() {
 		return sectionType == SectionType.RANDOM;
+	}
+	
+	public boolean isExam() {
+		return sectionType == SectionType.EXAM;
 	}
 	
 	public boolean isFixedSection(int sectionId) {

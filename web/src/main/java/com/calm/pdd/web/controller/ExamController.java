@@ -15,62 +15,65 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
-public class FixedQuestionsController {
+public class ExamController {
 	
-	private SectionFetcher sectionFetcher;
+	private ExamSetFetcher examSetFetcher;
 	private QuestionFetcher questionFetcher;
 	private AnswerChecker answerChecker;
 	private ProgressCompleteHandler progressCompleteHandler;
 	
-	public FixedQuestionsController(SectionFetcher sectionFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ProgressCompleteHandler progressCompleteHandler) {
-		this.sectionFetcher = sectionFetcher;
+	public ExamController(ExamSetFetcher examSetFetcher, QuestionFetcher questionFetcher, AnswerChecker answerChecker, ProgressCompleteHandler progressCompleteHandler) {
+		this.examSetFetcher = examSetFetcher;
 		this.questionFetcher = questionFetcher;
 		this.answerChecker = answerChecker;
 		this.progressCompleteHandler = progressCompleteHandler;
 	}
 	
-	@GetMapping("/section/{sectionId}")
-	public RedirectView enterSection(@PathVariable int sectionId, HttpSession session) {
-		QuestionProgress progress = sectionFetcher.fetchSection(sectionId);
+	@GetMapping("/exam")
+	public RedirectView enterSection(HttpSession session) {
+		QuestionProgress progress = examSetFetcher.fetchSet();
 		session.setAttribute("QUESTIONS_PROGRESS", progress);
 		
-		return new RedirectView(String.format("/section/%d/question/%d", sectionId, progress.getFirst().getQuestionNumber()));
+		return new RedirectView(String.format("/exam/question/%d", progress.getFirst().getQuestionNumber()));
 	}
 	
-	@GetMapping("/section/{sectionId}/question/{questionNumber}")
-	public String question(Model model, @PathVariable int sectionId, @PathVariable int questionNumber, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
-		if(!progress.isFixedSection(sectionId)) {
+	@GetMapping("/exam/question/{questionNumber}")
+	public String question(Model model, @PathVariable int questionNumber, @SessionAttribute("QUESTIONS_PROGRESS") QuestionProgress progress) {
+		if(!progress.isExam()) {
 			return "redirect:/sections";
 		}
 		
 		Question question = questionFetcher.fetchQuestion(progress, questionNumber);
 		
 		model.addAttribute("question", question);
+		model.addAttribute("currentProgressUnit", progress.getByNumber(questionNumber));
 		model.addAttribute("progress", progress);
 		
 		return "question";
 	}
 	
-	@PostMapping("/section/{sectionId}/question/{questionNumber}")
-	public String doAnswer(@PathVariable int sectionId, @PathVariable int questionNumber, @RequestParam int answer, HttpSession session, @AuthenticationPrincipal User user) {
+	@PostMapping("/exam/question/{questionNumber}")
+	public String doAnswer(@PathVariable int questionNumber, @RequestParam int answer, HttpSession session, @AuthenticationPrincipal User user) {
 		final QuestionProgress progress = (QuestionProgress) session.getAttribute("QUESTIONS_PROGRESS");
 		
-		if(progress.getByNumber(questionNumber).isAnswered()) {
-			return String.format("redirect:/section/%d/question/%d", sectionId, questionNumber);
+		if(progress.isCompleted()) {
+			return String.format("redirect:/exam/question/%d", questionNumber);
 		}
 		
-		boolean isAnswerCorrect = answerChecker.checkAnswer(progress, questionNumber, answer, user);
+		if(progress.getByNumber(questionNumber).isAnswered()) {
+			return String.format("redirect:/exam/question/%d", questionNumber);
+		}
+		
+		answerChecker.checkAnswer(progress, questionNumber, answer, user);
 		Optional<QuestionProgressUnit> nextQuestion = progress.findNextQuestion(questionNumber);
 		
 		String redirect;
-		if(!isAnswerCorrect) {
-			if(!nextQuestion.isPresent()) {
-				progressCompleteHandler.handle(progress, user);
-			}
-			redirect = String.format("redirect:/section/%d/question/%d", sectionId, questionNumber);
+		if(progress.hasTwoErrors()) {
+			progressCompleteHandler.handle(progress, user);
+			redirect = String.format("redirect:/questions/%s/result", progress.getId());
 		}
 		else if(nextQuestion.isPresent()) {
-			redirect = String.format("redirect:/section/%d/question/%d", sectionId, nextQuestion.get().getQuestionNumber());
+			redirect = String.format("redirect:/exam/question/%d", nextQuestion.get().getQuestionNumber());
 		}
 		else {
 			progressCompleteHandler.handle(progress, user);

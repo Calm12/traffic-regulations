@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,15 +40,26 @@ public class ResultControllerTest {
 	
 	@Test
 	void successCompleteAction() throws Exception {
-		mockMvc.perform(get("/questions/12345/complete/").session(session))
+		mockMvc.perform(get("/questions/12345/result/").session(session))
 				.andExpect(status().isOk())
 				.andExpect(view().name("complete"))
 				.andReturn();
 	}
 	
 	@Test
+	void successCompleteActionWhenFailedExam() throws Exception {
+		when(questionProgress.isExam()).thenReturn(true);
+		when(questionProgress.hasTwoErrors()).thenReturn(true);
+		
+		mockMvc.perform(get("/questions/12345/result/").session(session))
+				.andExpect(status().isOk())
+				.andExpect(view().name("fail"))
+				.andReturn();
+	}
+	
+	@Test
 	void completeActionWithWrongProgressId() throws Exception {
-		mockMvc.perform(get("/questions/123456/complete/").session(session))
+		mockMvc.perform(get("/questions/123456/result/").session(session))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/sections"))
 				.andReturn();
@@ -57,7 +69,7 @@ public class ResultControllerTest {
 	void completeActionWithEmptySession() throws Exception {
 		session.removeAttribute("QUESTIONS_PROGRESS");
 		
-		mockMvc.perform(get("/questions/12345/complete/").session(session))
+		mockMvc.perform(get("/questions/12345/result/").session(session))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/sections"))
 				.andReturn();

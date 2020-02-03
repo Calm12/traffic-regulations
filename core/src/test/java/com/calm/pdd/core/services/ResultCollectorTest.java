@@ -48,7 +48,7 @@ class ResultCollectorTest {
 		assertThat(result.getCorrect()).isEqualTo(3);
 		assertThat(result.getCorrectRate()).isEqualTo(60);
 		assertThat(result.getWrongRate()).isEqualTo(40);
-		assertThat(result.getDuration()).isGreaterThan(25_000L);
+		assertThat(result.getDuration()).isGreaterThan(25_000);
 	}
 	
 }

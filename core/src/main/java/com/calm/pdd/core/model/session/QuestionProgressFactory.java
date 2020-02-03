@@ -31,6 +31,15 @@ public class QuestionProgressFactory {
 		return progress;
 	}
 	
+	public QuestionProgress buildProgressForExam(List<Question> questions) {
+		QuestionProgress progress = new QuestionProgress(toProgressListWithNumbersOverride(questions));
+		progress.setSectionId(0);
+		progress.setProgressName("Экзамен");
+		progress.setSectionType(SectionType.EXAM);
+		
+		return progress;
+	}
+	
 	private List<QuestionProgressUnit> toProgressList(List<Question> questions) {
 		return questions.stream().map(q -> new QuestionProgressUnit(q.getId(), q.getNumber())).collect(Collectors.toList());
 	}

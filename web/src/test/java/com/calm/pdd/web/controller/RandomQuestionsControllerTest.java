@@ -58,6 +58,7 @@ public class RandomQuestionsControllerTest {
 	@BeforeEach
 	public void setUp() {
 		session = spy(new MockHttpSession());
+		lenient().when(questionProgress.getByNumber(1)).thenReturn(questionProgressUnit);
 		
 		mockMvc = MockMvcBuilders.standaloneSetup(new RandomQuestionsController(randomSetFetcher, questionFetcher, answerChecker, progressCompleteHandler))
 				.setControllerAdvice(BaseExceptionHandler.class)
@@ -132,7 +133,7 @@ public class RandomQuestionsControllerTest {
 		
 		mockMvc.perform(post("/random/question/1/").param("answer", "3").session(session))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/questions/1234567/complete"))
+				.andExpect(redirectedUrl("/questions/1234567/result"))
 				.andReturn();
 		
 		verify(progressCompleteHandler).handle(eq(questionProgress), any(User.class));

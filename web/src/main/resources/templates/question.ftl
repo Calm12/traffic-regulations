@@ -11,13 +11,13 @@
     <h3 class="jumbotron-heading pb-2">${progress.progressName}</h3>
     <div class="btn-group questions-progress" role="group">
         <#list progress.list as progressUnit>
-            <#rt><a href="<#if progress.randomSet>/random<#else>/section/#{progress.sectionId}</#if>/question/#{progressUnit.questionNumber}"
+            <#rt><a href="<#if progress.randomSet>/random<#elseif progress.exam>/exam<#else>/section/#{progress.sectionId}</#if>/question/#{progressUnit.questionNumber}"
                 <#t>class="btn <#if !progressUnit.isAnswered()>btn-light<#elseif progressUnit.isWrongAnswered()>btn-danger<#else>btn-success</#if> <#if progressUnit.questionNumber == currentProgressUnit.questionNumber>active</#if>"
                 <#t>role="button">#{progressUnit.questionNumber}
             <#lt></a>
         </#list>
         <#if progress.completed>
-            <a href="/questions/${progress.id}/complete" class="btn btn-info" role="button">Результат</a>
+            <a href="/questions/${progress.id}/result" class="btn btn-info" role="button">Результат</a>
         </#if>
     </div>
 </section>
@@ -39,7 +39,7 @@
                     </#if>
                 </#list>
             </div>
-            <form action="<#if progress.randomSet>/random<#else>/section/#{progress.sectionId}</#if>/question/#{currentProgressUnit.questionNumber}" method="post" id="answer-form">
+            <form action="<#if progress.randomSet>/random<#elseif progress.exam>/exam<#else>/section/#{progress.sectionId}</#if>/question/#{currentProgressUnit.questionNumber}" method="post" id="answer-form">
                 <input type="hidden" name="_csrf" value="${_csrf.token}" />
                 <input name="answer" id="answer" type="hidden" <#if currentProgressUnit.isAnswered()>disabled</#if>/>
             </form>

@@ -35,6 +35,6 @@ public class QuestionProgressUnit implements Serializable {
 	}
 	
 	public boolean isCorrectAnswered() {
-		return !isWrongAnswered();
+		return answerResult == AnswerResult.CORRECT;
 	}
 }

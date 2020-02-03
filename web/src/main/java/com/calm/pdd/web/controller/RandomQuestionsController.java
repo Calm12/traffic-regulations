@@ -69,7 +69,7 @@ public class RandomQuestionsController {
 		}
 		else {
 			progressCompleteHandler.handle(progress, user);
-			redirect = String.format("redirect:/questions/%s/complete", progress.getId());
+			redirect = String.format("redirect:/questions/%s/result", progress.getId());
 		}
 		
 		session.setAttribute("QUESTIONS_PROGRESS", progress);
