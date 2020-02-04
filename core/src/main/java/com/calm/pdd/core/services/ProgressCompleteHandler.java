@@ -27,40 +27,22 @@ public class ProgressCompleteHandler {
 		
 		statistic.addToTotalTestingTime(result.getDuration());
 		
-		/*
-		 * Возможно, позже добавлю режим "экзамен", а пока экзаменом считаем 20 рандомных вопросов с 2 и менее ошибками.
-		 * Если ошибок больше, считаем это неудачной попыткой экзамена
-		 */
-		if(progress.isRandomSet()) { //progress.isExam()
-			if(hasLessThanTwoErrors(progress)) {
-				statistic.setTopExamTime(Math.min(statistic.getTopExamTime(), result.getDuration()));
+		if(progress.isExam()) {
+			statistic.incrementTotalExamAttempts();
+			statistic.addToTotalExamScoreSum(result.getCorrect());
+			
+			if(!progress.hasTwoErrors()) {
 				statistic.incrementSuccessExamAttempts();
-				
-				if(hasNoErrors(progress)) {
-					statistic.incrementExamAttemptsWithoutErrors();
-				}
+				statistic.setTopExamTime(Math.min(statistic.getTopExamTime(), result.getDuration()));
 			}
-			else {
-				statistic.incrementTotalExamAttempts();
+			
+			if(progress.hasNoErrors()) {
+				statistic.incrementExamAttemptsWithoutErrors();
 			}
 		}
 		
-		
-		
-		//TODO save statistic
+		userStatisticRepository.save(statistic);
 		
 		return result;
-	}
-	
-	private boolean hasNoErrors(QuestionProgress progress) {
-		return hasErrorsLessThan(progress, 2);
-	}
-	
-	private boolean hasLessThanTwoErrors(QuestionProgress progress) {
-		return hasErrorsLessThan(progress, 2);
-	}
-	
-	private boolean hasErrorsLessThan(QuestionProgress progress, int lessThan) {
-		return progress.getList().stream().filter(q -> q.isWrongAnswered()).count() < lessThan;
 	}
 }

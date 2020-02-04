@@ -47,11 +47,23 @@ public class UserStatistic {
 		successExamAttempts += 1;
 	}
 	
+	public void addToTotalExamScoreSum(int newScore) {
+		totalTestingTime += newScore;
+	}
+	
 	public void incrementExamAttemptsWithoutErrors() {
 		examAttemptsWithoutErrors += 1;
 	}
 	
 	public void incrementTotalExamAttempts() {
 		totalExamAttempts += 1;
+	}
+	
+	public int getAverageExamScore() {
+		if(totalExamAttempts == 0) {
+			return 0;
+		}
+		
+		return totalExamScoreSum / totalExamAttempts;
 	}
 }
