@@ -4,6 +4,7 @@ import com.calm.pdd.core.exceptions.EmailExistsException;
 import com.calm.pdd.core.exceptions.UserExistsException;
 import com.calm.pdd.core.model.dto.UserDto;
 import com.calm.pdd.core.model.entity.User;
+import com.calm.pdd.core.model.entity.UserStatistic;
 import com.calm.pdd.core.model.enums.Role;
 import com.calm.pdd.core.model.repository.UserRepository;
 import com.calm.pdd.core.model.repository.UserStatisticRepository;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,6 +75,8 @@ class UserServiceTest {
 		assertThat(user.getPassword()).isEqualTo("123456xxx");
 		assertThat(user.isActive()).isTrue();
 		assertThat(user.getRoles()).contains(Role.USER);
+		
+		verify(userStatisticRepository).save(isA(UserStatistic.class));
 	}
 	
 	@Test

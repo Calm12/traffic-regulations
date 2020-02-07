@@ -1,10 +1,11 @@
-package com.calm.pdd.core.services;
+package com.calm.pdd.core.services.statistic;
 
 import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.entity.UserStatistic;
 import com.calm.pdd.core.model.repository.UserStatisticRepository;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.Result;
+import com.calm.pdd.core.services.ResultCollector;
 import org.springframework.stereotype.Service;
 
 @Service

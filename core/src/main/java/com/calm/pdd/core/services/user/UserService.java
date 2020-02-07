@@ -38,11 +38,11 @@ public class UserService implements IUserRegistrationService, UserDetailsService
 				.setActive(true)
 				.addRole(Role.USER);
 		
-		User saved = userRepository.save(user);
+		userRepository.save(user);
 		
-		userStatisticRepository.save(new UserStatistic(saved.getId()));
+		userStatisticRepository.save(new UserStatistic(user.getId()));
 		
-		return saved;
+		return user;
 	}
 	
 	@Override

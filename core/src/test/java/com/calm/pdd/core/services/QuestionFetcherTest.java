@@ -41,7 +41,6 @@ class QuestionFetcherTest {
 		when(questionProgress.getByNumber(1)).thenReturn(questionProgressUnit);
 		when(questionProgressUnit.getQuestionId()).thenReturn(123);
 		
-		
 		questionFetcher = new QuestionFetcher(questionRepository);
 	}
 	
@@ -57,7 +56,6 @@ class QuestionFetcherTest {
 	void questionNotFound() {
 		when(questionRepository.findById(123)).thenReturn(Optional.empty());
 		
-		AnswerChecker answerChecker = new AnswerChecker(questionRepository);
 		assertThrows(UnknownQuestionException.class, () -> questionFetcher.fetchQuestion(questionProgress, 1));
 	}
 }

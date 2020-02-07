@@ -5,6 +5,7 @@ import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
 import com.calm.pdd.core.services.*;
+import com.calm.pdd.core.services.statistic.ProgressCompleteHandler;
 import com.calm.pdd.web.controller.exception.BaseExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

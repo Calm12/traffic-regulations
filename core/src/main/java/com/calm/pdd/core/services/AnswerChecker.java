@@ -6,6 +6,7 @@ import com.calm.pdd.core.model.enums.AnswerResult;
 import com.calm.pdd.core.model.repository.QuestionRepository;
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
+import com.calm.pdd.core.services.statistic.QuestionsCoverageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnswerChecker {
 	
-	private QuestionRepository questionRepository;
+	private final QuestionRepository questionRepository;
+	private final QuestionsCoverageHandler questionsCoverageHandler;
 	
-	public AnswerChecker(QuestionRepository questionRepository) {
+	public AnswerChecker(QuestionRepository questionRepository, QuestionsCoverageHandler questionsCoverageHandler) {
 		this.questionRepository = questionRepository;
+		this.questionsCoverageHandler = questionsCoverageHandler;
 	}
 	
 	/**
@@ -34,6 +37,8 @@ public class AnswerChecker {
 			progressUnit.setAnswerResult(AnswerResult.WRONG);
 		}
 		progressUnit.setAnsweredNumber(answer);
+		
+		questionsCoverageHandler.updateCoverage(user, question, progressUnit);
 		
 		return progressUnit.isCorrectAnswered();
 	}
