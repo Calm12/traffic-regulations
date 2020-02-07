@@ -24,7 +24,7 @@ public class UserStatistic {
 	@Column(unique=true)
 	private int userId;
 	
-	private int topExamTime;
+	private int topExamTime = Integer.MAX_VALUE;
 	
 	private int totalTestingTime;
 	
@@ -63,7 +63,7 @@ public class UserStatistic {
 	}
 	
 	public void addToTotalExamScoreSum(int newScore) {
-		totalTestingTime += newScore;
+		totalExamScoreSum += newScore;
 	}
 	
 	public void incrementExamAttemptsWithoutErrors() {
