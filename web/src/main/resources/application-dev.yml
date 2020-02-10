@@ -19,8 +19,12 @@ spring:
     redis:
         host: localhost
         port: 6379
+        timeout: 2000
     session:
         store-type: redis
+    cache:
+        redis:
+            time-to-live: 2000
 
 
 server:
