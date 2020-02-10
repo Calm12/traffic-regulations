@@ -2,7 +2,7 @@ package com.calm.pdd.core.services;
 
 import com.calm.pdd.core.model.session.QuestionProgress;
 import com.calm.pdd.core.model.session.Result;
-import org.apache.commons.lang3.time.DurationFormatUtils;
+import com.calm.pdd.core.util.Duration;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,12 +19,8 @@ public class ResultCollector {
 		result.setWrongRate(100 - result.getCorrectRate());
 		
 		result.setDuration((int)(System.currentTimeMillis() - progress.getStartTime()));
-		result.setFormattedDuration(humanizeDuration(result.getDuration()));
+		result.setFormattedDuration(Duration.humanize(result.getDuration()));
 		
 		return result;
-	}
-	
-	private String humanizeDuration(long time) {
-		return DurationFormatUtils.formatDuration(time, "HH:mm:ss");
 	}
 }
