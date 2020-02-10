@@ -12,6 +12,8 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
 	List<Question> getListBySectionId(int section);
 	
+	Integer countBySectionId(int section);
+	
 	@Query(nativeQuery = true, value = "SELECT * FROM questions ORDER BY rand() LIMIT :count")
 	List<Question> getRandomList(@Param("count") int count);
 }
