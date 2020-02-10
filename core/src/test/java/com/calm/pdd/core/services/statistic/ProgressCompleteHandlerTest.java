@@ -1,5 +1,6 @@
 package com.calm.pdd.core.services.statistic;
 
+import com.calm.pdd.core.exceptions.UserHasNotStatisticException;
 import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.entity.UserStatistic;
 import com.calm.pdd.core.model.repository.UserStatisticRepository;
@@ -151,6 +152,6 @@ class ProgressCompleteHandlerTest {
 	@Test
 	void userHasNotStatistic() {
 		when(userStatisticRepository.findByUserId(123)).thenReturn(Optional.empty());
-		assertThrows(RuntimeException.class, () -> progressCompleteHandler.handle(questionProgress, user));
+		assertThrows(UserHasNotStatisticException.class, () -> progressCompleteHandler.handle(questionProgress, user));
 	}
 }

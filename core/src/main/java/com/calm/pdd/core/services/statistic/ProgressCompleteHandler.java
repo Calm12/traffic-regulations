@@ -1,5 +1,6 @@
 package com.calm.pdd.core.services.statistic;
 
+import com.calm.pdd.core.exceptions.UserHasNotStatisticException;
 import com.calm.pdd.core.model.entity.User;
 import com.calm.pdd.core.model.entity.UserStatistic;
 import com.calm.pdd.core.model.repository.UserStatisticRepository;
@@ -22,9 +23,7 @@ public class ProgressCompleteHandler {
 		Result result = resultCollector.collect(progress);
 		progress.setResult(result);
 		
-		UserStatistic statistic = userStatisticRepository
-				.findByUserId(user.getId())
-				.orElseThrow(() -> new RuntimeException("Wtf?! User [" + user.getId() + "] has not UserStatistic!"));
+		UserStatistic statistic = userStatisticRepository.findByUserId(user.getId()).orElseThrow(() -> new UserHasNotStatisticException(user));
 		
 		statistic.addToTotalTestingTime(result.getDuration());
 		

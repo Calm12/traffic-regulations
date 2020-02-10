@@ -1,5 +1,6 @@
 package com.calm.pdd.core.services.statistic;
 
+import com.calm.pdd.core.exceptions.UserHasNotStatisticException;
 import com.calm.pdd.core.model.entity.Coverage;
 import com.calm.pdd.core.model.entity.Question;
 import com.calm.pdd.core.model.entity.User;
@@ -22,9 +23,7 @@ public class QuestionsCoverageHandler {
 	
 	@Transactional
 	public void updateCoverage(User user, Question question, QuestionProgressUnit progressUnit) {
-		UserStatistic statistic = userStatisticRepository
-				.findByUserId(user.getId())
-				.orElseThrow(() -> new RuntimeException("Wtf?! User [" + user.getId() + "] has not UserStatistic!"));
+		UserStatistic statistic = userStatisticRepository.findByUserId(user.getId()).orElseThrow(() -> new UserHasNotStatisticException(user));
 		
 		Optional<Coverage> currentQuestionCoverage = statistic.getCoverages().stream().filter(c -> c.getQuestionId() == question.getId()).findFirst();
 		

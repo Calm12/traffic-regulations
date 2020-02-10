@@ -2,6 +2,7 @@ package com.calm.pdd.core.services.statistic;
 
 import com.calm.pdd.core.IntegrationTestApplication;
 import com.calm.pdd.core.config.spring.PersistenceContext;
+import com.calm.pdd.core.exceptions.UserHasNotStatisticException;
 import com.calm.pdd.core.model.entity.*;
 import com.calm.pdd.core.model.repository.UserStatisticRepository;
 import com.calm.pdd.core.model.session.QuestionProgressUnit;
@@ -90,6 +91,6 @@ class QuestionsCoverageHandlerTest {
 	@Test
 	void userHasNotStatistic() {
 		when(user.getId()).thenReturn(456);
-		assertThrows(RuntimeException.class, () -> questionsCoverageHandler.updateCoverage(user, question, questionProgressUnit));
+		assertThrows(UserHasNotStatisticException.class, () -> questionsCoverageHandler.updateCoverage(user, question, questionProgressUnit));
 	}
 }
