@@ -15,27 +15,35 @@
 
 <div class="py-5 bg-light">
     <div class="container">
-        <div class="d-flex justify-content-center h4 pb-4">Вы ответили на все вопросы!</div>
-        <div class="justify-content-center">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Результат</li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Всего вопросов: <span class="badge badge-secondary badge-pill">${progress.result.total}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Правильных ответов: <span class="badge badge-success badge-pill">${progress.result.correct}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Количество ошибок: <span class="badge badge-danger badge-pill">${progress.result.wrong}</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Успешность: <span class="badge badge-secondary badge-pill">${progress.result.correctRate}%</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Потраченное время: <span class="badge badge-secondary badge-pill">${progress.result.formattedDuration}</span>
-                </li>
-            </ul>
-            <a role="button" href="<#if progress.randomSet>/random<#else>/section/#{progress.sectionId}</#if>/question/${progress.first.questionNumber}" class="btn btn-secondary btn-lg btn-block">Вернуться к вопросам</a>
+        <div class="row">
+            <div class="col">
+                <div class="d-flex justify-content-center h4 pb-4">Вы ответили на все вопросы!</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm-6">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item justify-content-between">Результат</li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Всего вопросов: <span class="badge badge-secondary badge-pill">${progress.result.total}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Правильных ответов: <span class="badge badge-success badge-pill">${progress.result.correct}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Количество ошибок: <span class="badge badge-danger badge-pill">${progress.result.wrong}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Успешность: <span class="badge badge-secondary badge-pill">${progress.result.correctRate}%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Потраченное время: <span class="badge badge-secondary badge-pill">${progress.result.formattedDuration}</span>
+                    </li>
+                </ul>
+                <a role="button" href="<#if progress.randomSet>/random<#else>/section/#{progress.sectionId}</#if>/question/${progress.first.questionNumber}" class="btn btn-secondary btn-lg btn-block">Вернуться к вопросам</a>
+            </div>
+            <div class="col-sm"></div>
         </div>
     </div>
 </div>
