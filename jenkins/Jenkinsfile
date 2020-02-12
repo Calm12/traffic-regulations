@@ -19,7 +19,9 @@ pipeline {
         stage('last docker stop') {
             steps {
                 dir('web/target/build/docker') {
-                    sh 'docker-compose down' //try use "|| true"
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        sh 'docker-compose down'
+                    }
                 }
             }
         }
