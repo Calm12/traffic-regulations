@@ -45,7 +45,7 @@
             </form>
         </div>
         <div class="col-md-4">
-            <img class="question-image" src="/images/#{question.id}.jpg" alt="image"/>
+            <img class="question-image" src="/images/questions/#{question.id}.jpg" alt="image"/>
         </div>
     </div>
 
