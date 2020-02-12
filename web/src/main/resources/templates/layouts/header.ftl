@@ -43,9 +43,11 @@
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="/exam">Экзамен</a>
                         <a class="dropdown-item" href="/statistic">Статистика</a>
-                        <a class="dropdown-item" href="#">Профиль</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Продолжить</a>
+                        <form action="/logout" method="post">
+                            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                            <a href="" class="dropdown-item" onclick="this.parentNode.submit(); return false;">Выйти</a>
+                        </form>
                     </div>
                 </div>
             </#if>
