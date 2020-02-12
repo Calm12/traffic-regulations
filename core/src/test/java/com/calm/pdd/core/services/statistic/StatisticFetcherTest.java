@@ -85,6 +85,7 @@ class StatisticFetcherTest {
 		
 		assertThat(statistic.getTotalTestingTime()).isEqualTo("00:30:15");
 		assertThat(statistic.getTopExamTime()).isEqualTo("00:00:15");
+		assertThat(statistic.getAverageThinkingAboutQuestion()).isEqualTo("00:03:01");
 		assertThat(statistic.getTotalExamAttempts()).isEqualTo(10);
 		assertThat(statistic.getSuccessExamAttempts()).isEqualTo(5);
 		assertThat(statistic.getExamAttemptsWithoutErrors()).isEqualTo(1);

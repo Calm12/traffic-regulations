@@ -35,10 +35,11 @@ public class StatisticFetcher {
 		Set<Coverage> rawCoverages = userStatistic.getCoverages();
 		
 		long totalQuestionsCount = questionRepository.count();
+		long totalAnsweredCount = rawCoverages.size();
 		long correctAnswersCount = rawCoverages.stream().filter(c -> c.isCorrect()).count();
 		
-		int completedPartRate = (int) (((float) rawCoverages.size() / (float) totalQuestionsCount) * 100);
-		int completedPartSuccessRate = (int) (((float) correctAnswersCount / (float) rawCoverages.size()) * 100);
+		int completedPartRate = (int) (((float) totalAnsweredCount / (float) totalQuestionsCount) * 100);
+		int completedPartSuccessRate = (int) (((float) correctAnswersCount / (float) totalAnsweredCount) * 100);
 		
 		List<Section> sections = sectionRepository.findByOrderBySectionOrderAsc();
 		
@@ -65,6 +66,7 @@ public class StatisticFetcher {
 		return Statistic.builder()
 				.totalTestingTime(Duration.humanize(userStatistic.getTotalTestingTime()))
 				.topExamTime(userStatistic.getTopExamTime() != Integer.MAX_VALUE ? Duration.humanize(userStatistic.getTopExamTime()) : "—")
+				.averageThinkingAboutQuestion(userStatistic.getTotalTestingTime() != 0 ? Duration.humanize(userStatistic.getTotalTestingTime() / totalAnsweredCount) : "—")
 				.totalExamAttempts(userStatistic.getTotalExamAttempts())
 				.successExamAttempts(userStatistic.getSuccessExamAttempts())
 				.examAttemptsWithoutErrors(userStatistic.getExamAttemptsWithoutErrors())

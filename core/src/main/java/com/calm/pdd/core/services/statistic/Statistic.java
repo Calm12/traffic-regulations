@@ -13,6 +13,7 @@ public class Statistic implements Serializable {
 	
 	private final String totalTestingTime;
 	private final String topExamTime;
+	private final String averageThinkingAboutQuestion ;
 	private final int totalExamAttempts;
 	private final int successExamAttempts;
 	private final int examAttemptsWithoutErrors;
