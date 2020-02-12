@@ -47,13 +47,16 @@ public class StatisticFetcher {
 			List<Coverage> rawSectionCoverage = rawCoverages.stream().filter(c -> c.getSectionId() == section.getId()).collect(Collectors.toList());
 			int correctAnswered = (int) rawSectionCoverage.stream().filter(c -> c.isCorrect()).count();
 			
+			int totalQuestions = questionRepository.countBySectionId(section.getId());
+			int correctAnsweredPart = (int) (((float) correctAnswered / (float) totalQuestions) * 100);
+			
 			SectionCoverage sectionCoverage = SectionCoverage.builder()
 					.sectionId(section.getId())
 					.sectionName(String.format("%s. %s", section.getNumber(), section.getName()))
-					.totalQuestions(questionRepository.countBySectionId(section.getId()))
+					.totalQuestions(totalQuestions)
 					.correctAnswered(correctAnswered)
 					.wrongAnswered(rawSectionCoverage.size() - correctAnswered)
-					.totalAnswered(rawSectionCoverage.size())
+					.correctAnsweredPart(correctAnsweredPart)
 					.build();
 			
 			coverage.add(sectionCoverage);

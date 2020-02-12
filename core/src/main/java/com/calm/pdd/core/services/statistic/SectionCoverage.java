@@ -15,5 +15,5 @@ public class SectionCoverage implements Serializable {
 	private final int totalQuestions;
 	private final int correctAnswered;
 	private final int wrongAnswered;
-	private final int totalAnswered;
+	private final int correctAnsweredPart;
 }

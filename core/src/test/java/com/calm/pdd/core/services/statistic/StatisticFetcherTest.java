@@ -45,14 +45,6 @@ class StatisticFetcherTest {
 	public void setUp() {
 		when(user.getId()).thenReturn(123);
 		
-		when(questionRepository.count()).thenReturn(150L);
-		when(questionRepository.countBySectionId(anyInt())).thenReturn(20);
-		
-		when(section.getId()).thenReturn(1);
-		when(section.getNumber()).thenReturn("1");
-		when(section.getName()).thenReturn("section_1");
-		when(sectionRepository.findByOrderBySectionOrderAsc()).thenReturn(Collections.singletonList(section));
-		
 		Set<Coverage> coverages = new HashSet<>();
 		coverages.add(new Coverage(1, 1, true));
 		coverages.add(new Coverage(2, 1, false));
@@ -81,6 +73,14 @@ class StatisticFetcherTest {
 	
 	@Test
 	void test() {
+		when(questionRepository.count()).thenReturn(150L);
+		when(questionRepository.countBySectionId(anyInt())).thenReturn(20);
+		
+		when(section.getId()).thenReturn(1);
+		when(section.getNumber()).thenReturn("1");
+		when(section.getName()).thenReturn("section_1");
+		when(sectionRepository.findByOrderBySectionOrderAsc()).thenReturn(Collections.singletonList(section));
+		
 		Statistic statistic = statisticFetcher.fetch(user);
 		
 		assertThat(statistic.getTotalTestingTime()).isEqualTo("00:30:15");
@@ -99,8 +99,7 @@ class StatisticFetcherTest {
 		assertThat(sectionCoverage.getTotalQuestions()).isEqualTo(20);
 		assertThat(sectionCoverage.getCorrectAnswered()).isEqualTo(6);
 		assertThat(sectionCoverage.getWrongAnswered()).isEqualTo(4);
-		assertThat(sectionCoverage.getTotalAnswered()).isEqualTo(10);
-		
+		assertThat(sectionCoverage.getCorrectAnsweredPart()).isEqualTo(30);
 	}
 	
 	@Test
