@@ -108,3 +108,36 @@ footer p {
         display: block !important;
     }
 }
+
+.section-statistic {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+}
+
+.readiness_background {
+    background-color: #ececec;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 3px;
+}
+
+.section-name {
+    position: relative;
+    padding-right: 45px;
+    display: block;
+}
+
+.readiness {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+}

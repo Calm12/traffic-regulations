@@ -17,6 +17,7 @@
     <link href="/webjars/font-awesome/5.12.0/css/all.min.css" rel="stylesheet"/>
     <link href="/webjars/alertifyjs/1.4.1/build/css/alertify.min.css" rel="stylesheet"/>
     <link href="/webjars/alertifyjs/1.4.1/build/css/themes/default.min.css" rel="stylesheet"/>
+    <link href="/css/circle.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet"/>
 </head>
 <body>
