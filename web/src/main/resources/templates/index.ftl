@@ -32,7 +32,7 @@
                 <div class="card mb-4 shadow-sm">
                     <img src="/images/1.jpg" alt="" class="img-thumbnail">
                     <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <p class="card-text">Правила дорожного движения на автомобиле</p>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="card mb-4 shadow-sm">
                     <img src="/images/2.jpg" alt="" class="img-thumbnail">
                     <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <p class="card-text">Все дорожные знаки, разметка, первая помощь</p>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                 <div class="card mb-4 shadow-sm">
                     <img src="/images/3.jpg" alt="" class="img-thumbnail">
                     <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <p class="card-text">Правила движения пешеходов и велосипедистов</p>
                     </div>
                 </div>
             </div>
