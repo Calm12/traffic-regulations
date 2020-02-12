@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('configure') {
             steps {
-                sh 'cp dist/docker/.env.template dist/docker/.env'
+                sh 'cp web/dist/docker/.env.template web/dist/docker/.env'
             }
         }
         stage('last docker stop') {
