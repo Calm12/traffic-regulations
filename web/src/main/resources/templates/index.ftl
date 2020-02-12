@@ -7,6 +7,8 @@
     <div class="container">
         <h1 class="jumbotron-heading">Подготовка к экзамену в СЦ</h1>
         <p class="lead text-muted">Наша база содержит все вопросы с теоретического экзамена по правилам дорожного движения в сервисном центре</p>
+        <p class="lead text-muted">Вам доступны три режима тестирования: вопросы по теме, случайные вопросы и экзамен</p>
+        <p class="lead text-muted">Контролировать свое обучение очень легко благодаря полной и удобной личной статистике</p>
         <#if authUser??>
             <p>
                 <a href="/sections" class="btn btn-primary my-2">Вопросы по темам</a>
@@ -28,46 +30,25 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                    <img src="/images/1.jpg" alt="" class="img-thumbnail">
                     <div class="card-body">
                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
-                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                    <img src="/images/2.jpg" alt="" class="img-thumbnail">
                     <div class="card-body">
                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
-                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                    <img src="/images/3.jpg" alt="" class="img-thumbnail">
                     <div class="card-body">
                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small class="text-muted">9 mins</small>
-                        </div>
                     </div>
                 </div>
             </div>
