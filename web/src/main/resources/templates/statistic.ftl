@@ -144,6 +144,7 @@
                                     <div>Правильных ответов: <span class="text-success">${section.correctAnswered}</span></div>
                                     <div>Неправильных ответов: <span class="text-danger">${section.wrongAnswered}</span></div>
                                     <div>Прогресс: ${section.correctAnsweredPart}%</div>
+                                    <div><a href="/section/${section.sectionId}">Вернуться к теме</a></div>
                                 </div>
                             </div>
                         </div>
